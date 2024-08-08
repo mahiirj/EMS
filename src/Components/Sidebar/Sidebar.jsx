@@ -1,0 +1,37 @@
+import React from "react";
+import "./Sidebar.css";
+import { Link } from "react-router-dom";
+import Home from "../../Pages/Home";
+import Employee from "../../Pages/Employee";
+
+const Sidebar = () => {
+  return (
+    <div className="sidebar">
+      <div className="logo">
+        <h1>
+          <Link to="/">GS APPAREL</Link>
+        </h1>
+      </div>
+
+      <div className="dashboard">
+        <h2>Dashboard</h2>
+        <ul className="menu-list">
+          <li>
+            <Link to="/"> Home </Link>
+          </li>
+          <li>
+            <Link to="/Employee">Employees </Link>
+          </li>
+          <li>
+            <Link to="/Salary">Salary</Link>
+          </li>
+          <li>Product</li>
+        </ul>
+        <br />
+        <p>settings</p>
+      </div>
+    </div>
+  );
+};
+
+export default Sidebar;

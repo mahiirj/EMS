@@ -1,0 +1,60 @@
+* {
+  margin: 0;
+}
+
+.home {
+  display: flex;
+  background: #f8f9fa;
+}
+
+.section2 {
+  display: block;
+}
+
+.main {
+  width: 1430px;
+  height: 200px;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.time {
+  margin: 30px;
+  transform: translateY(20px);
+  font-size: 24px;
+  margin-bottom: 0px;
+}
+
+.que-card {
+  background-color: rgb(68, 220, 231);
+  border-radius: 15px;
+  padding: 10px 30px;
+  width: 200px;
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 0 20px; /* Adjust margin as needed */
+  position: absolute;
+  font-weight: 700;
+  font-size: 22px;
+}
+
+.left {
+  left: calc(48% - 400px); /* Adjust the position as needed */
+}
+
+.right {
+  right: calc(52% - 800px); /* Adjust the position as needed */
+}
+
+.attendance {
+  margin: 40px;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 500px;
+  border-radius: 10px;
+}

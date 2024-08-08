@@ -1,0 +1,34 @@
+{
+  "name": "ems",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "start:react": "vite",
+    "start:electron": "cross-env VITE_DEV_SERVER_URL=http://localhost:5173 electron .",
+    "start": "concurrently \"npm run start:react\" \"wait-on http://localhost:5173 && npm run start:electron\""
+  },
+  "dependencies": {
+    "electron": "^31.3.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.25.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "eslint": "^8.57.0",
+    "eslint-plugin-react": "^7.34.2",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "eslint-plugin-react-refresh": "^0.4.7",
+    "vite": "^5.3.1",
+    "concurrently": "^8.0.0",  
+    "wait-on": "^6.0.0",
+    "cross-env": "^7.0.3"
+  },
+  "description": "Employee management system",
+  "main": "main.cjs",
+  "author": "Mahith Rajapaksha",
+  "license": "MIT"
+}
