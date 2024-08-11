@@ -58,6 +58,12 @@ const Employee = () => {
     setSelectedEmployee(null);
   };
 
+  const handleRefresh = ()=>{
+
+    window.electron.send("employee-refresh");
+
+  };
+
   return (
     <div className={styles.page}>
       <div className={styles.side}>
@@ -78,7 +84,7 @@ const Employee = () => {
           <div className={styles.title}>
             <h1>Employee List</h1>
             <button onClick={handleAddNew}>ADD NEW</button>
-            <button>REFRESH</button>
+            <button onclick={handleRefresh}>REFRESH</button>
           </div>
 
           <div className={styles.etable}>

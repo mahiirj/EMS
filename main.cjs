@@ -228,6 +228,66 @@ ipcMain.on("employee:add", function (e,formData) {
 
 
 
+//employee-refresh request recieved
+
+ipcMain.on('employee-refresh',function(){
+
+    iterateemployees();
+
+
+})
+
+
+//function to iterate through the employees and fetch the data
+
+async function iterateemployees(event){
+
+    let employee_array = [];
+
+    try{
+      
+      const employees = await employee_details.find();
+
+      employees.forEach(employee =>{
+
+        const employeeData = {
+
+            employee_id: employee.employeeID,
+            employee_pic: employee.image,
+            employee_name: employee.name,
+            employee_NIC: employee.ID_number,
+            employee_mobile_phone: employee.contact.mobile_number,
+            employee_telephone: employee.contact.telephone_number,
+            employee_status: employee.status,
+            employee_NIC_pic: employee.NIC_pic,
+            truncated_NIC: employee.NIC_pic ? employee.NIC_pic.slice(0, 10) : ''
+        };
+
+        employee_array.push(employeeData);
+
+        console.log(employeeData);
+
+        employeeData = null;
+        
+        
+     })
+
+      mainWindow.webContents.send("employee_list:send", employee_array);
+
+  }catch(error){
+
+      console.log(error);
+
+      console.log("error iterating through the items");
+
+  }
+
+
+}
+
+
+
+
 
 
 
