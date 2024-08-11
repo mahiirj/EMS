@@ -293,6 +293,98 @@ async function iterateemployees(event){
 }
 
 
+//recieving search employee queries
+
+ipcMain.on('sending_search:find',function(e,searchQuery){
+
+
+    search_employees(searchQuery);
+    
+})
+
+//function for searching through the employee list
+
+
+//get all the employees related to the search query
+
+async function search_employees(searchQuery){
+
+
+    try{
+
+        const SearchCriteria = {
+
+            $or:[
+
+                { employeeID: searchQuery },
+
+                { name: new RegExp(searchQuery, 'i') }, // Case-insensitive search
+
+                { ID_number: searchQuery },
+
+                { 'contact.mobile_number': searchQuery },
+
+                { 'contact.telephone_number': searchQuery},
+
+                { status: { $regex: `^${searchQuery}$`, $options: 'i' } }  //case insensitive search and exact match
+
+
+            ]
+
+        };
+
+        const matchingEmployees = await employee_details.find(SearchCriteria);
+
+        // Clear the table before displaying the search results
+
+        // addWindow1.webContents.send("employee_list:clear");
+
+
+        // Iterate through the matching employees and send the data to the renderer process
+
+        matchingEmployees.forEach(employee => {
+
+            const employee_id = employee.employeeID;
+
+            const employee_pic = employee.image;
+
+            const employee_name = employee.name;
+
+            const employee_NIC = employee.ID_number;
+
+            const employee_mobile_phone = employee.contact.mobile_number;
+
+            const employee_telephone = employee.contact.telephone_number;
+
+            const employee_status = employee.status;
+
+            const employee_NIC_pic = employee.NIC_pic;
+
+            const truncated_NIC = employee_NIC_pic ? employee_NIC_pic.slice(0, 10) : '';
+
+            // addWindow1.webContents.send("employee_list_searched:found", employee_pic, employee_name, employee_NIC, employee_id, employee_status, employee_NIC_pic, employee_mobile_phone, employee_telephone, truncated_NIC);
+
+            console.log(employee);
+
+            console.log("employees have been found successfully");
+
+        })
+
+
+    }  catch(error){
+
+        console.log(error);
+
+        console.log("error iterating through the searched items");
+
+    }
+
+
+}
+
+
+
+
 
 
 

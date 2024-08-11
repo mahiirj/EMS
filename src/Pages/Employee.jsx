@@ -58,7 +58,9 @@ const Employee = () => {
   const handleSearch = () => {
     // Implement the search logic here
     console.log("Searching for:", searchQuery);
-    alert(searchQuery);
+    
+    window.electron.ipcRenderer.send('sending_search:find',searchQuery);
+
   };
 
   return (
