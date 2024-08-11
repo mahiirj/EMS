@@ -11,7 +11,9 @@ const Counter = require('./counter');
 
 //mongo db connection ensure
 mongoose.connect('mongodb://localhost:27017/Garment', { useNewUrlParser: true, useUnifiedTopology: true })
+
     .then(async() => {
+
         console.log('Connected to MongoDB');
 
         // Initialize the counter if it does not exist
