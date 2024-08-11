@@ -8,13 +8,10 @@ const EmployeeTable = ({ employeeData, onRowClick }) => {
         <thead>
           <tr>
             <th>Employee ID</th>
-            <th>Name</th>
             <th>Profile Picture</th>
-            <th>Address</th>
-            <th>Gender</th>
-            <th>Registered Date</th>
+            <th>Name</th>
+            <th>NIC Number</th>
             <th>ID Number</th>
-
             <th>Status</th>
             <th>Contact</th>
             <th>NIC Picture</th>
@@ -24,17 +21,20 @@ const EmployeeTable = ({ employeeData, onRowClick }) => {
           {employeeData.map((entry, index) => (
             <tr key={index} onClick={() => onRowClick(entry)}>
               <td>{entry.id}</td>
-              <td>{entry.name}</td>
               <td>
                 <img src={entry.profilePicture} alt="Picture" />
               </td>
-              <td>{entry.address}</td>
-              <td>{entry.gender}</td>
-              <td>{entry.registeredDate}</td>
+              <td>{entry.name}</td>
               <td>{entry.idNumber}</td>
-
+              <td>{entry.idNumber}</td>
               <td>{entry.status}</td>
-              <td>{entry.contact}</td>
+
+              <td>
+                {entry.mobile}
+                <br />
+                {entry.telephone}
+              </td>
+
               <td>
                 <img src={entry.nicPicture} alt="NIC" />
               </td>

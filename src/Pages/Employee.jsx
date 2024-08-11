@@ -58,10 +58,8 @@ const Employee = () => {
     setSelectedEmployee(null);
   };
 
-  const handleRefresh = ()=>{
-
-    window.electron.send("employee-refresh");
-
+  const handleRefresh = () => {
+    window.electron.ipcRenderer.send("employee-refresh");
   };
 
   return (
@@ -83,8 +81,12 @@ const Employee = () => {
         <div className={styles.list}>
           <div className={styles.title}>
             <h1>Employee List</h1>
-            <button onClick={handleAddNew}>ADD NEW</button>
-            <button onclick={handleRefresh}>REFRESH</button>
+            <button onClick={handleAddNew} className={styles.addnew}>
+              ADD NEW
+            </button>
+            <button onClick={handleRefresh} className={styles.refresh}>
+              REFRESH
+            </button>
           </div>
 
           <div className={styles.etable}>
