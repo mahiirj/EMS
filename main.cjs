@@ -180,7 +180,9 @@ ipcMain.on("employee:add", function (e,formData) {
 
     const id_number = formData.idNumber;
 
-    const mob_number = formData.contact;
+    const mob_number = formData.mobile_number;
+
+    const telephone_number = formData.telephone_number;
 
     async function run() {
 
@@ -203,7 +205,7 @@ ipcMain.on("employee:add", function (e,formData) {
                 contact:{
 
                     mobile_number: mob_number,
-                    telephone_number: mob_number
+                    telephone_number: telephone_number
 
                 }
                 

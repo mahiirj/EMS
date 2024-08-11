@@ -11,7 +11,8 @@ const AddEmployeeModal = ({ onClose, onSave }) => {
     idNumber: "",
     profilePicture: "",
     status: "",
-    contact: "",
+    mobile_number: "",
+    telephone_number: "",
     nicPicture: "",
   });
 
@@ -118,8 +119,8 @@ const AddEmployeeModal = ({ onClose, onSave }) => {
             Mobile number:
             <input
               type="text"
-              name="mobile"
-              value={formData.mobile}
+              name="mobile_number"
+              value={formData.mobile_number}
               onChange={handleChange}
               required
             />
@@ -129,8 +130,8 @@ const AddEmployeeModal = ({ onClose, onSave }) => {
             Telephone:
             <input
               type="text"
-              name="telephone"
-              value={formData.telephone}
+              name="telephone_number"
+              value={formData.telephone_number}
               onChange={handleChange}
             />
           </label>
