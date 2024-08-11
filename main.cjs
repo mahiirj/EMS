@@ -29,10 +29,12 @@ mongoose.connect('mongodb://localhost:27017/Garment', { useNewUrlParser: true, u
 
 
 
-
 let mainWindow;
 
 app.on('ready', () => {
+
+    
+
     mainWindow = new BrowserWindow({
         width: 1000,
         height: 700,
@@ -53,6 +55,8 @@ app.on('ready', () => {
         app.quit();
     });
 });
+
+
 
 let imageData;
 
@@ -230,7 +234,9 @@ ipcMain.on("employee:add", function (e,formData) {
 
 //employee-refresh request recieved
 
-ipcMain.on('employee-refresh',function(){
+ipcMain.on('employee_refresh',function(e){
+
+    console.log("request recieved");
 
     iterateemployees();
 
@@ -250,24 +256,23 @@ async function iterateemployees(event){
 
       employees.forEach(employee =>{
 
-        const employeeData = {
+        let emData = {
 
-            employee_id: employee.employeeID,
+            id: employee.employeeID,
             employee_pic: employee.image,
-            employee_name: employee.name,
-            employee_NIC: employee.ID_number,
-            employee_mobile_phone: employee.contact.mobile_number,
-            employee_telephone: employee.contact.telephone_number,
-            employee_status: employee.status,
-            employee_NIC_pic: employee.NIC_pic,
-            truncated_NIC: employee.NIC_pic ? employee.NIC_pic.slice(0, 10) : ''
+            name: employee.name,
+            id_number: employee.ID_number,
+            status: employee.status,
+            mobile: employee.contact.mobile_number,
+            telephone: employee.contact.telephone_number,
+            nicPicture: employee.NIC_pic,
         };
 
-        employee_array.push(employeeData);
+        employee_array.push(emData);
 
-        console.log(employeeData);
+        console.log(emData);
 
-        employeeData = null;
+        emData = null;
         
         
      })

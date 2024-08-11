@@ -6,29 +6,19 @@ import AddEmployeeModal from "../Components/Employee/AddEmployeeModal";
 import EmployeeProfile from "../Components/Employee/EmployeeProfile";
 
 const Employee = () => {
+
   const [employeeData, setEmployeeData] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
 
   useEffect(() => {
-    const emdata = [
-      {
-        id: "E001",
-        name: "Menidu",
-        address: "198/2 kanatta road",
-        details: ["m", "e", "n", "i", "d", "u", "j"],
-        gender: "Male",
-        dateOfBirth: "2023-01-01",
-        registeredDate: "2023-01-01",
-        idNumber: "123456789V",
-        profilePicture: "srcassetsprofilepic.jpg",
-        status: "Active",
-        mobile: "123-456-7890",
-        telephone: "123-456-7890",
-        nicPicture: "",
-      },
-    ];
-    setEmployeeData(emdata);
+    
+    window.electron.ipcRenderer.on("employee_list:send",function(e,employee_array){
+
+      setEmployeeData(employee_array);
+
+    })
+    
   }, []);
 
   const handleAddNew = () => {
@@ -58,11 +48,14 @@ const Employee = () => {
     setSelectedEmployee(null);
   };
 
-  const handleRefresh = () => {
-    window.electron.ipcRenderer.send("employee-refresh");
+  const handleRefresh = (e)=>{
+
+    window.electron.ipcRenderer.send("employee_refresh");
+
   };
 
   return (
+    
     <div className={styles.page}>
       <div className={styles.side}>
         <Sidebar />
@@ -81,12 +74,8 @@ const Employee = () => {
         <div className={styles.list}>
           <div className={styles.title}>
             <h1>Employee List</h1>
-            <button onClick={handleAddNew} className={styles.addnew}>
-              ADD NEW
-            </button>
-            <button onClick={handleRefresh} className={styles.refresh}>
-              REFRESH
-            </button>
+            <button onClick={handleAddNew}>ADD NEW</button>
+            <button onClick={handleRefresh}>REFRESH</button>
           </div>
 
           <div className={styles.etable}>
