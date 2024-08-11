@@ -1,7 +1,5 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import "./AddEmployeeModal.css";
-
-
 
 const AddEmployeeModal = ({ onClose, onSave }) => {
   const [formData, setFormData] = useState({
@@ -11,7 +9,7 @@ const AddEmployeeModal = ({ onClose, onSave }) => {
     gender: "",
     registeredDate: "",
     idNumber: "",
-    profilePicture:"",
+    profilePicture: "",
     status: "",
     contact: "",
     nicPicture: "",
@@ -32,28 +30,21 @@ const AddEmployeeModal = ({ onClose, onSave }) => {
   };
 
   const open_profile_pic = (e) => {
-
     e.preventDefault();
 
-    window.electron.ipcRenderer.send('open-file-dialog');
-
+    window.electron.ipcRenderer.send("open-file-dialog");
   };
 
   const open_nic_pic = (e) => {
-
     e.preventDefault();
 
-    window.electron.ipcRenderer.send('open-file-dialog');
-
+    window.electron.ipcRenderer.send("open-file-dialog");
   };
 
-
-  const onSubmit = (e) =>{
-
+  const onSubmit = (e) => {
     e.preventDefault();
 
-    window.electron.ipcRenderer.send('employee:add',formData);
-
+    window.electron.ipcRenderer.send("employee:add", formData);
   };
 
   return (
@@ -61,16 +52,6 @@ const AddEmployeeModal = ({ onClose, onSave }) => {
       <div className="modalContent">
         <h2>Add New Employee</h2>
         <form onSubmit={handleSubmit}>
-          <label>
-            Employee ID:
-            <input
-              type="text"
-              name="id"
-              value={formData.id}
-              onChange={handleChange}
-              required
-            />
-          </label>
           <label>
             Name:
             <input
@@ -121,19 +102,9 @@ const AddEmployeeModal = ({ onClose, onSave }) => {
               required
             />
           </label>
-          
+
           <label>
-            Status:
-            <input
-              type="text"
-              name="status"
-              value={formData.status}
-              onChange={handleChange}
-              required
-            />
-          </label>
-          <label>
-            Contact:
+            Mobile number:
             <input
               type="text"
               name="contact"
@@ -142,14 +113,37 @@ const AddEmployeeModal = ({ onClose, onSave }) => {
               required
             />
           </label>
-          
+
+          <label>
+            Telephone:
+            <input
+              type="text"
+              name="contact"
+              value={formData.contact}
+              onChange={handleChange}
+            />
+          </label>
 
           <div className="pic-button">
-            <button className="propic" onClick={open_profile_pic}  value={formData.profilePicture}>Profile Picture</button>
-            <button className="nic"onClick={open_nic_pic} value={formData.nicPicture} >nic</button>
+            <button
+              className="propic"
+              onClick={open_profile_pic}
+              value={formData.profilePicture}
+            >
+              Profile Picture
+            </button>
+            <button
+              className="nic"
+              onClick={open_nic_pic}
+              value={formData.nicPicture}
+            >
+              nic
+            </button>
           </div>
 
-          <button type="submit"onClick={onSubmit}>Save</button>
+          <button type="submit" onClick={onSubmit}>
+            Save
+          </button>
           <button type="button" onClick={onClose}>
             Cancel
           </button>
