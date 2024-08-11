@@ -11,7 +11,6 @@ const EmployeeTable = ({ employeeData, onRowClick }) => {
             <th>Profile Picture</th>
             <th>Name</th>
             <th>NIC Number</th>
-            <th>ID Number</th>
             <th>Status</th>
             <th>Contact</th>
             <th>NIC Picture</th>
@@ -22,11 +21,10 @@ const EmployeeTable = ({ employeeData, onRowClick }) => {
             <tr key={index} onClick={() => onRowClick(entry)}>
               <td>{entry.id}</td>
               <td>
-                <img src={entry.profilePicture} alt="Picture" />
+                <img src={entry.employee_pic} alt="Picture" />
               </td>
               <td>{entry.name}</td>
-              <td>{entry.idNumber}</td>
-              <td>{entry.idNumber}</td>
+              <td>{entry.id_number}</td>
               <td>{entry.status}</td>
 
               <td>

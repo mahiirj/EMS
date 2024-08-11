@@ -23,7 +23,6 @@ const employee_schema = new mongoose.Schema({
 
         mobile_number: String,
         telephone_number: String
-
     },
     NIC_pic: String
 });
