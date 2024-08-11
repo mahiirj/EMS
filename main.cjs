@@ -166,7 +166,6 @@ ipcMain.on("employee:add", function (e,formData) {
     
     extractDateComponents(registeredDate);
 
-
     const registeredYear = registered_month;
 
     const registeredMonth = registered_month;
@@ -224,6 +223,14 @@ ipcMain.on("employee:add", function (e,formData) {
 
     
 });
+
+
+
+
+
+
+
+
 
 
 
