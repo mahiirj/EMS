@@ -38,7 +38,7 @@ const AddEmployeeModal = ({ onClose, onSave }) => {
   const open_nic_pic = (e) => {
     e.preventDefault();
 
-    window.electron.ipcRenderer.send("open-file-dialog");
+    window.electron.ipcRenderer.send("open-NIC-dialog");
   };
 
   const onSubmit = (e) => {
