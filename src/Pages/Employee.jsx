@@ -9,6 +9,7 @@ const Employee = () => {
   const [employeeData, setEmployeeData] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     window.electron.ipcRenderer.on(
@@ -50,6 +51,16 @@ const Employee = () => {
     window.electron.ipcRenderer.send("employee_refresh");
   };
 
+  const handleSearchInputChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const handleSearch = () => {
+    // Implement the search logic here
+    console.log("Searching for:", searchQuery);
+    alert(searchQuery);
+  };
+
   return (
     <div className={styles.page}>
       <div className={styles.side}>
@@ -62,8 +73,11 @@ const Employee = () => {
             type="text"
             placeholder="   Search"
             className={styles.searchbar}
+            id="searchbar"
+            value={searchQuery}
+            onChange={handleSearchInputChange}
           />
-          <button>Search</button>
+          <button onClick={handleSearch}>Search</button>
         </div>
 
         <div className={styles.list}>
