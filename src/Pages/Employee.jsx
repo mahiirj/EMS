@@ -5,7 +5,6 @@ import EmployeeTable from "../Components/Employee/EmployeeTable";
 import AddEmployeeModal from "../Components/Employee/AddEmployeeModal";
 import EmployeeProfile from "../Components/Employee/EmployeeProfile";
 
-
 const Employee = () => {
   const [employeeData, setEmployeeData] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -19,11 +18,13 @@ const Employee = () => {
         address: "198/2 kanatta road",
         details: ["m", "e", "n", "i", "d", "u", "j"],
         gender: "Male",
+        dateOfBirth: "2023-01-01",
         registeredDate: "2023-01-01",
         idNumber: "123456789V",
-        profilePicture: "src\assets\profilepic.jpg",
+        profilePicture: "srcassetsprofilepic.jpg",
         status: "Active",
-        contact: "123-456-7890",
+        mobile: "123-456-7890",
+        telephone: "123-456-7890",
         nicPicture: "",
       },
     ];
@@ -77,6 +78,7 @@ const Employee = () => {
           <div className={styles.title}>
             <h1>Employee List</h1>
             <button onClick={handleAddNew}>ADD NEW</button>
+            <button>REFRESH</button>
           </div>
 
           <div className={styles.etable}>

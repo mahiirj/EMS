@@ -83,6 +83,17 @@ const AddEmployeeModal = ({ onClose, onSave }) => {
             />
           </label>
           <label>
+            Date of Birth:
+            <input
+              type="date"
+              name="dateOfBirth"
+              value={formData.dateOfBirth}
+              onChange={handleChange}
+              required
+            />
+          </label>
+
+          <label>
             Registered Date:
             <input
               type="date"
@@ -107,8 +118,8 @@ const AddEmployeeModal = ({ onClose, onSave }) => {
             Mobile number:
             <input
               type="text"
-              name="contact"
-              value={formData.contact}
+              name="mobile"
+              value={formData.mobile}
               onChange={handleChange}
               required
             />
@@ -118,8 +129,8 @@ const AddEmployeeModal = ({ onClose, onSave }) => {
             Telephone:
             <input
               type="text"
-              name="contact"
-              value={formData.contact}
+              name="telephone"
+              value={formData.telephone}
               onChange={handleChange}
             />
           </label>
