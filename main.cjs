@@ -384,6 +384,67 @@ async function search_employees(searchQuery){
 
 
 
+//employee profile request recieved
+
+ipcMain.on('profile_id:send', async (e,employee_id)=>{
+
+    console.log(employee_id);
+
+    display_profile(employee_id);
+
+
+})
+
+
+//function for displaying the requested search profile and sending the data to the renderer
+
+async function display_profile (employee_id){
+
+    try{
+      
+      const employees = await employee_details.find();
+
+      employees.forEach(employee =>{
+          
+        if (employee_id == employee.employeeID){
+
+            // Create an object with the required structure
+
+            const employeeProfile = {
+
+                id: employee.employeeID,
+                name: employee.name,
+                address: `${employee.address.street}, ${employee.address.city}`,
+                gender: employee.gender,
+                registeredDate: `${employee.registeredYear}-${employee.registeredMonth}-${employee.registeredDay}`,
+                idNumber: employee.ID_number,
+                profilePicture: employee.image,
+                status: employee.status,
+                mobile_number: employee.contact.mobile_number,
+                telephone_number: employee.contact.telephone_number,
+                nicPicture: employee.NIC_pic,
+            }
+
+           console.log(employeeProfile);
+          
+           mainWindow.webContents.send("employee_profile:recieve",employeeProfile);
+
+           
+        }})
+
+  }catch(error){
+
+      console.log(error);
+
+      console.log("error iterating through the profile items");
+
+  }
+
+}
+
+
+
+
 
 
 

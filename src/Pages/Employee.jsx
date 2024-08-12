@@ -10,14 +10,30 @@ const Employee = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [employee_Profile, setEmployeeProfile] = useState([]);
 
   useEffect(() => {
+
     window.electron.ipcRenderer.on(
       "employee_list:send",
       function (e, employee_array) {
         setEmployeeData(employee_array);
       }
     );
+
+    window.electron.ipcRenderer.on("employee_profile:recieve",function(e,employeeProfile){
+
+      setEmployeeProfile(employeeProfile); 
+
+    })
+
+    // return()=>{
+
+    //   window.electron.ipcRenderer.removeAllListeners("employee_list:send");
+    //   window.electron.ipcRenderer.removeAllListeners("employee_profile:receive");
+
+    // };
+
   }, []);
 
   const handleAddNew = () => {
@@ -34,8 +50,10 @@ const Employee = () => {
 
   const handleRowClick = (employeeData) => {
     alert(employeeData.id);
+    let employee_id = employeeData.id;
     setSelectedEmployee(employeeData.id);
-    window.electron.ipcRenderer.send("profile_id:send", employeeData.id);
+    window.electron.ipcRenderer.send("profile_id:send", employee_id);
+
   };
 
   const handleCloseProfile = () => {
@@ -112,7 +130,7 @@ const Employee = () => {
 
       {selectedEmployee && (
         <EmployeeProfile
-          employee={selectedEmployee}
+          employee={employee_Profile}
           onClose={handleCloseProfile}
           onRemove={handleRemoveEmployee}
         />
