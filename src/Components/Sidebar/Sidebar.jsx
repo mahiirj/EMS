@@ -5,6 +5,14 @@ import Home from "../../Pages/Home";
 import Employee from "../../Pages/Employee";
 
 const Sidebar = () => {
+
+  const load_employees=(e)=>{
+     
+    window.electron.ipcRenderer.send("employee_refresh");
+
+
+  }
+
   return (
     <div className="sidebar">
       <div className="logo">
@@ -19,7 +27,7 @@ const Sidebar = () => {
           <li>
             <Link to="/"> Home </Link>
           </li>
-          <li>
+          <li onClick={load_employees}>
             <Link to="/Employee">Employees </Link>
           </li>
           <li>
