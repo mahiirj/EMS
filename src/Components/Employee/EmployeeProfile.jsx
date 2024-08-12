@@ -1,9 +1,24 @@
-import React from "react";
+import React, { useState } from "react";
 import "./EmployeeProfile.css";
+import ProfilePicture from "./ProfilePicture";
 
 const EmployeeProfile = ({ employee, onClose, onRemove }) => {
+  const [isPictureOpen, setIsPictureOpen] = useState(false);
+  const [currentPicture, setCurrentPicture] = useState(null);
+
   const handleViewPayments = () => {
     alert("View payment history for " + employee.name);
+  };
+
+  const handlePic = (e, picUrl) => {
+    e.stopPropagation(); // Prevents the row click event
+    setCurrentPicture(picUrl);
+    setIsPictureOpen(true);
+  };
+
+  const handleClose = () => {
+    setIsPictureOpen(false);
+    setCurrentPicture(null);
   };
 
   return (
@@ -44,7 +59,20 @@ const EmployeeProfile = ({ employee, onClose, onRemove }) => {
             <strong>Status:</strong> <span>{employee.status}</span>
           </div>
           <div className="detailRow">
-            <strong>Contact:</strong> <span>{employee.mobile}</span>
+            <strong>Mobile number:</strong>{" "}
+            <span>{employee.mobile_number}</span>
+          </div>
+          <div className="detailRow">
+            <strong>Contact number:</strong>{" "}
+            <span>{employee.telephone_number}</span>
+          </div>
+          <div className="detailRow">
+            <strong>NIC Picture:</strong>{" "}
+            <span>
+              <button onClick={(e) => handlePic(e, employee.nicPicture)}>
+                Click here
+              </button>
+            </span>
           </div>
         </div>
         <div className="profileActions">
@@ -52,6 +80,10 @@ const EmployeeProfile = ({ employee, onClose, onRemove }) => {
           <button onClick={() => onRemove(employee.id)}>Remove Employee</button>
         </div>
       </div>
+
+      {isPictureOpen && (
+        <ProfilePicture pictureUrl={currentPicture} onClose={handleClose} />
+      )}
     </div>
   );
 };
