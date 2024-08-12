@@ -302,12 +302,12 @@ ipcMain.on('sending_search:find',function(e,searchQuery){
     
 })
 
-//function for searching through the employee list
-
 
 //get all the employees related to the search query
 
 async function search_employees(searchQuery){
+
+    let employee_array = [];
 
 
     try{
@@ -337,38 +337,38 @@ async function search_employees(searchQuery){
 
         // Clear the table before displaying the search results
 
-        // addWindow1.webContents.send("employee_list:clear");
+        mainWindow.webContents.send("employee_list:clear");
 
 
         // Iterate through the matching employees and send the data to the renderer process
 
         matchingEmployees.forEach(employee => {
 
-            const employee_id = employee.employeeID;
+            let emData = {
 
-            const employee_pic = employee.image;
-
-            const employee_name = employee.name;
-
-            const employee_NIC = employee.ID_number;
-
-            const employee_mobile_phone = employee.contact.mobile_number;
-
-            const employee_telephone = employee.contact.telephone_number;
-
-            const employee_status = employee.status;
-
-            const employee_NIC_pic = employee.NIC_pic;
-
-            const truncated_NIC = employee_NIC_pic ? employee_NIC_pic.slice(0, 10) : '';
-
+                id: employee.employeeID,
+                employee_pic: employee.image,
+                name: employee.name,
+                id_number: employee.ID_number,
+                status: employee.status,
+                mobile: employee.contact.mobile_number,
+                telephone: employee.contact.telephone_number,
+                nicPicture: employee.NIC_pic,
+            };
+    
+            employee_array.push(emData);
+    
+            console.log(emData);
+    
+            emData = null;
+            
             // addWindow1.webContents.send("employee_list_searched:found", employee_pic, employee_name, employee_NIC, employee_id, employee_status, employee_NIC_pic, employee_mobile_phone, employee_telephone, truncated_NIC);
-
-            console.log(employee);
 
             console.log("employees have been found successfully");
 
         })
+
+        mainWindow.webContents.send("employee_list:send", employee_array);
 
 
     }  catch(error){

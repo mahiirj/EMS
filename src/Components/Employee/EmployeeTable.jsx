@@ -1,6 +1,7 @@
 import React from "react";
 import "./EmployeeTable.css";
 
+
 const EmployeeTable = ({ employeeData, onRowClick }) => {
   return (
     <div className="tableContainer">

@@ -18,6 +18,7 @@ const Employee = () => {
         setEmployeeData(employee_array);
       }
     );
+    
   }, []);
 
   const handleAddNew = () => {
