@@ -35,13 +35,16 @@ const EmployeeProfile = ({ employee, onClose, onRemove }) => {
             <span>{employee.registeredDate}</span>
           </div>
           <div className="detailRow">
+            <strong>Date of Birth:</strong> <span>{employee.dateOfBirth}</span>
+          </div>
+          <div className="detailRow">
             <strong>ID Number:</strong> <span>{employee.idNumber}</span>
           </div>
           <div className="detailRow">
             <strong>Status:</strong> <span>{employee.status}</span>
           </div>
           <div className="detailRow">
-            <strong>Contact:</strong> <span>{employee.contact}</span>
+            <strong>Contact:</strong> <span>{employee.mobile}</span>
           </div>
         </div>
         <div className="profileActions">

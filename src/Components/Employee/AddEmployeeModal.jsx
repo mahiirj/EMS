@@ -7,6 +7,7 @@ const AddEmployeeModal = ({ onClose, onSave }) => {
     name: "",
     address: "",
     gender: "",
+    dateOfBirth: "",
     registeredDate: "",
     idNumber: "",
     profilePicture: "",

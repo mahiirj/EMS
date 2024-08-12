@@ -1,8 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import "./EmployeeTable.css";
 import ProfilePicture from "./ProfilePicture";
 
 const EmployeeTable = ({ employeeData, onRowClick }) => {
+  const [isPictureOpen, setIsPictureOpen] = useState(false);
+  const [currentPicture, setCurrentPicture] = useState(null);
+
+  const handlePic = (e, picUrl) => {
+    e.stopPropagation(); // Prevents the row click event
+    setCurrentPicture(picUrl);
+    setIsPictureOpen(true);
+  };
+
+  const handleClose = () => {
+    setIsPictureOpen(false);
+    setCurrentPicture(null);
+  };
+
   return (
     <div className="tableContainer">
       <table className="table">
@@ -27,20 +41,24 @@ const EmployeeTable = ({ employeeData, onRowClick }) => {
               <td>{entry.name}</td>
               <td>{entry.id_number}</td>
               <td>{entry.status}</td>
-
               <td>
                 {entry.mobile}
                 <br />
                 {entry.telephone}
               </td>
-
               <td>
-                <a href={<ProfilePicture />}> View Photo </a>
+                <button onClick={(e) => handlePic(e, entry.nicPicture)}>
+                  view pic
+                </button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
+
+      {isPictureOpen && (
+        <ProfilePicture pictureUrl={currentPicture} onClose={handleClose} />
+      )}
     </div>
   );
 };
