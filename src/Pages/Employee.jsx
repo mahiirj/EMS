@@ -18,7 +18,6 @@ const Employee = () => {
         setEmployeeData(employee_array);
       }
     );
-    
   }, []);
 
   const handleAddNew = () => {
@@ -33,8 +32,10 @@ const Employee = () => {
     setEmployeeData((prevData) => [...prevData, newEmployee]);
   };
 
-  const handleRowClick = (employee) => {
-    setSelectedEmployee(employee);
+  const handleRowClick = (employeeData) => {
+    alert(employeeData.id);
+    setSelectedEmployee(employeeData.id);
+    window.electron.ipcRenderer.send("profile_id:send", employeeData.id);
   };
 
   const handleCloseProfile = () => {
@@ -59,9 +60,8 @@ const Employee = () => {
   const handleSearch = () => {
     // Implement the search logic here
     console.log("Searching for:", searchQuery);
-    
-    window.electron.ipcRenderer.send('sending_search:find',searchQuery);
 
+    window.electron.ipcRenderer.send("sending_search:find", searchQuery);
   };
 
   return (

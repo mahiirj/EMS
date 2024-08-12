@@ -1,6 +1,6 @@
 import React from "react";
 import "./EmployeeTable.css";
-
+import ProfilePicture from "./ProfilePicture";
 
 const EmployeeTable = ({ employeeData, onRowClick }) => {
   return (
@@ -35,7 +35,7 @@ const EmployeeTable = ({ employeeData, onRowClick }) => {
               </td>
 
               <td>
-                <img src={entry.nicPicture} alt="NIC" />
+                <a href={<ProfilePicture />}> View Photo </a>
               </td>
             </tr>
           ))}
