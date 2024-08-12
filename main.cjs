@@ -138,41 +138,34 @@ ipcMain.on("employee:add", function (e,formData) {
     const registeredDate = formData.registeredDate;
 
 
+
     let registered_month;
+
     let registered_year;
+
     let registered_day;
 
+    // Regular expression to match the date format YYYY-MM-DD
+    const regex = /^(\d{4})-(\d{2})-(\d{2})$/;
 
-    //function to extract the year, month and date
 
-    function extractDateComponents(registeredDate) {
+    // Apply the regex to the date string
 
-        // Regular expression to match mm/dd/yy format
-        const regex = /^(\d{2})\/(\d{2})\/(\d{2})$/;
-    
-        // Apply the regex to the date string
-        const match = registeredDate.match(regex);
-    
-        if (match) {
+    const match = registeredDate.match(regex);
 
-            // Extract month, day, and year from the match result
-            registered_month = match[1];
-            registered_day = match[2];
-            registered_year = match[3];
-    
-            return { registered_month, registered_day, registered_year };
+    if (match) {
+        registered_year= match[1];
+        registered_month= match[2];
+        registered_day= match[3];
 
-        } else {
+        console.log(registered_year);
 
-            // If the input string doesn't match the format, return null or an error
-            return null;
-        }
+    } else {
+        console.log("Invalid date format");
     }
 
-    
-    extractDateComponents(registeredDate);
 
-    const registeredYear = registered_month;
+    const registeredYear = registered_year;
 
     const registeredMonth = registered_month;
 
