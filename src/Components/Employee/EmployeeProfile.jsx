@@ -1,13 +1,16 @@
 import React, { useState } from "react";
 import "./EmployeeProfile.css";
 import ProfilePicture from "./ProfilePicture";
+import EditEmployeeModal from "./EditEmployeeModal";
 
 const EmployeeProfile = ({ employee, onClose, onRemove }) => {
   const [isPictureOpen, setIsPictureOpen] = useState(false);
   const [currentPicture, setCurrentPicture] = useState(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [employeeData, setEmployeeData] = useState(employee);
 
   const handleViewPayments = () => {
-    alert("View payment history for " + employee.name);
+    alert("View payment history for " + employeeData.name);
   };
 
   const handlePic = (e, picUrl) => {
@@ -16,9 +19,21 @@ const EmployeeProfile = ({ employee, onClose, onRemove }) => {
     setIsPictureOpen(true);
   };
 
-  const handleClose = () => {
+  const handleClosePicture = () => {
     setIsPictureOpen(false);
     setCurrentPicture(null);
+  };
+
+  const handleOpenEditModal = () => {
+    setIsEditModalOpen(true);
+  };
+
+  const handleCloseEditModal = () => {
+    setIsEditModalOpen(false);
+  };
+
+  const handleSave = (updatedEmployee) => {
+    setEmployeeData(updatedEmployee);
   };
 
   return (
@@ -29,47 +44,48 @@ const EmployeeProfile = ({ employee, onClose, onRemove }) => {
         </button>
         <div className="profileHeader">
           <img
-            src={employee.profilePicture || "default-profile.png"}
+            src={employeeData.profilePicture || "default-profile.png"}
             alt="Profile"
             className="profileImage"
           />
-          <h2>{employee.name}</h2>
+          <h2>{employeeData.name}</h2>
         </div>
         <div className="profileDetails">
           <div className="detailRow">
-            <strong>ID:</strong> <span>{employee.id}</span>
+            <strong>ID:</strong> <span>{employeeData.id}</span>
           </div>
           <div className="detailRow">
-            <strong>Address:</strong> <span>{employee.address}</span>
+            <strong>Address:</strong> <span>{employeeData.address}</span>
           </div>
           <div className="detailRow">
-            <strong>Gender:</strong> <span>{employee.gender}</span>
+            <strong>Gender:</strong> <span>{employeeData.gender}</span>
           </div>
           <div className="detailRow">
             <strong>Registered Date:</strong>{" "}
-            <span>{employee.registeredDate}</span>
+            <span>{employeeData.registeredDate}</span>
           </div>
           <div className="detailRow">
-            <strong>Date of Birth:</strong> <span>{employee.dateOfBirth}</span>
+            <strong>Date of Birth:</strong>{" "}
+            <span>{employeeData.dateOfBirth}</span>
           </div>
           <div className="detailRow">
-            <strong>ID Number:</strong> <span>{employee.idNumber}</span>
+            <strong>ID Number:</strong> <span>{employeeData.idNumber}</span>
           </div>
           <div className="detailRow">
-            <strong>Status:</strong> <span>{employee.status}</span>
+            <strong>Status:</strong> <span>{employeeData.status}</span>
           </div>
           <div className="detailRow">
             <strong>Mobile number:</strong>{" "}
-            <span>{employee.mobile_number}</span>
+            <span>{employeeData.mobile_number}</span>
           </div>
           <div className="detailRow">
             <strong>Contact number:</strong>{" "}
-            <span>{employee.telephone_number}</span>
+            <span>{employeeData.telephone_number}</span>
           </div>
           <div className="detailRow">
             <strong>NIC Picture:</strong>{" "}
             <span>
-              <button onClick={(e) => handlePic(e, employee.nicPicture)}>
+              <button onClick={(e) => handlePic(e, employeeData.nicPicture)}>
                 Click here
               </button>
             </span>
@@ -77,12 +93,27 @@ const EmployeeProfile = ({ employee, onClose, onRemove }) => {
         </div>
         <div className="profileActions">
           <button onClick={handleViewPayments}>View Payment History</button>
-          <button onClick={() => onRemove(employee.id)}>Remove Employee</button>
+          <button onClick={handleOpenEditModal}>Edit</button>
+
+          <button onClick={() => onRemove(employeeData.id)}>
+            Remove Employee
+          </button>
         </div>
       </div>
 
       {isPictureOpen && (
-        <ProfilePicture pictureUrl={currentPicture} onClose={handleClose} />
+        <ProfilePicture
+          pictureUrl={currentPicture}
+          onClose={handleClosePicture}
+        />
+      )}
+
+      {isEditModalOpen && (
+        <EditEmployeeModal
+          employee={employeeData}
+          onClose={handleCloseEditModal}
+          onSave={handleSave}
+        />
       )}
     </div>
   );
