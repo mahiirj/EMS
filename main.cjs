@@ -114,6 +114,7 @@ ipcMain.on("employee:add", function (e,formData) {
     const name = formData.name;
 
     const address = formData.address;
+
     //functin to split the address string
 
     function splitString(input) {
@@ -434,6 +435,111 @@ async function display_profile (employee_id){
   }
 
 }
+
+
+//
+
+
+
+ipcMain.on('send_edited_info:send',function(event,editedEmployee){
+
+    console.log(editedEmployee);
+
+    const edited_id = editedEmployee.id;
+
+    const address = editedEmployee.address;
+    
+    //functin to split the address string
+
+    function splitString(input) {
+
+        // Split the string by commas
+        const parts = input.split(',');
+
+        // Combine the first two parts with a comma
+        const firstPart = parts.slice(0, 2).join(',');
+    
+        // The rest of the string is the second part
+        const secondPart = parts.slice(2).join(',');
+    
+        return [firstPart, secondPart];
+    }
+
+    const [street, city] = splitString(address);
+
+    //extracting the registered date
+
+    const registeredDate = editedEmployee.registeredDate;
+
+    let registered_month;
+
+    let registered_year;
+
+    let registered_day;
+
+    // Regular expression to match the date format YYYY-MM-DD
+    const regex = /^(\d{4})-(\d{2})-(\d{2})$/;
+
+
+    // Apply the regex to the date string
+
+    const match = registeredDate.match(regex);
+
+    if (match) {
+        registered_year= match[1];
+        registered_month= match[2];
+        registered_day= match[3];
+
+        console.log(registered_year);
+
+    } else {
+        console.log("Invalid date format");
+    }
+
+
+    const registeredYear = registered_year;
+
+    const registeredMonth = registered_month;
+
+    const registeredDay = registered_day;
+
+  // function to update the edited employee details form the profile
+
+
+        async function update_employees(editedEmployee,edited_id,street,city,registeredYear,registeredMonth,registeredDay)
+
+                {
+
+                    const employee = await employee_details.findOne({employeeID: edited_id});
+
+                    employee.address.street = street;
+                    employee.address.city = city;
+                    employee.gender = editedEmployee.gender;
+                    employee.birthday = editedEmployee.registeredDate;
+                    employee.registeredYear = registeredYear;
+                    employee.registeredMonth = registeredMonth;
+                    employee.registeredDay = registeredDay;
+                    employee.ID_number = editedEmployee.idNumber;
+                    employee.image = editedEmployee.profilePicture;
+                    employee.NIC_pic = editedEmployee.nicPicture;
+                    employee.contact.mobile_number = editedEmployee.mobile_number;
+                    employee.contact.telephone_number = editedEmployee.telephone_number;
+
+
+                    console.log("updated employee",employee);
+
+                    employee.save();
+
+                }
+
+
+                    //calling the update employee function
+
+                    update_employees(editedEmployee,edited_id,street,city,registeredYear,registeredMonth,registeredDay)
+
+
+});
+
 
 
 
