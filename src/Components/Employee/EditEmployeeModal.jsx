@@ -121,6 +121,7 @@ const EditEmployeeModal = ({ employee, onClose, onSave }) => {
           <div className="editRow">
             <strong>Profile Picture:</strong>
             <button>Change Profile picture</button>
+            {/* ado */}
           </div>
         </div>
         <button className="saveButton" onClick={handleSave}>
