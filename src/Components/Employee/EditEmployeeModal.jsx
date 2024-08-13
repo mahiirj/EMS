@@ -1,8 +1,42 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import "./EditEmployeeModal.css";
 
 const EditEmployeeModal = ({ employee, onClose, onSave }) => {
   const [editedEmployee, setEditedEmployee] = useState({ ...employee });
+
+  useEffect(() => {
+
+    const handleProfileImageUpdate = (e, updated_imageData) => {
+      setEditedEmployee((prev) => ({
+        ...prev,
+        profilePicture: updated_imageData, // Update profile picture in state
+      }));
+    };
+
+    const handleNICImageUpdate = (e, updated_NIC_imageData) => {
+      setEditedEmployee((prev) => ({
+        ...prev,
+        nicPicture: updated_NIC_imageData, // Update NIC picture in state
+      }));
+    };
+
+
+    window.electron.ipcRenderer.on(
+      "send_profile:send",handleProfileImageUpdate
+      
+    );
+
+    window.electron.ipcRenderer.on(
+      "send_NIC:send",handleNICImageUpdate
+    );
+
+    // return()=>{
+
+    //   window.electron.ipcRenderer.removeAllListeners("employee_list:send");
+    //   window.electron.ipcRenderer.removeAllListeners("employee_profile:receive");
+
+    // };
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -14,6 +48,18 @@ const EditEmployeeModal = ({ employee, onClose, onSave }) => {
     window.electron.ipcRenderer.send("send_edited_info:send", editedEmployee);
     onClose();
   };
+
+  const ChangeNIC = ()=>{
+
+    window.electron.ipcRenderer.send('open-NIC-update-dialog');
+
+  }
+
+  const ChangeProfile = () =>{
+
+    window.electron.ipcRenderer.send('open-file-update-dialog');
+
+  }
 
   return (
     <div className="modalOverlay">
@@ -74,7 +120,7 @@ const EditEmployeeModal = ({ employee, onClose, onSave }) => {
             <input
               type="text"
               name="dateOfBirth"
-              value={editedEmployee.dateOfBirth}
+              value={editedEmployee.birthday}
               onChange={handleChange}
             />
           </div>
@@ -116,11 +162,11 @@ const EditEmployeeModal = ({ employee, onClose, onSave }) => {
           </div>
           <div className="editRow">
             <strong>NIC Picture:</strong>
-            <button>Change NIC picture</button>
+            <button onClick={ChangeNIC}>Change NIC picture</button>
           </div>
           <div className="editRow">
-            <strong>Profile Picture:</strong>
-            <button>Change Profile picture</button>
+            <strong>Profile Picture</strong>
+            <button onClick={ChangeProfile}>Change Profile picture</button>
             {/* ado */}
           </div>
         </div>

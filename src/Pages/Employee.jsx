@@ -24,6 +24,7 @@ const Employee = () => {
       "employee_profile:recieve",
       function (e, employeeProfile) {
         setEmployeeProfile(employeeProfile);
+        // setSelectedEmployee(employeeProfile.id);
       }
     );
 
@@ -47,9 +48,11 @@ const Employee = () => {
     setEmployeeData((prevData) => [...prevData, newEmployee]);
   };
 
+  
+
   const handleRowClick = (employeeData) => {
     let employee_id = employeeData.id;
-    setSelectedEmployee(employeeData.id);
+    setSelectedEmployee(employee_id);
     window.electron.ipcRenderer.send("profile_id:send", employee_id);
   };
 

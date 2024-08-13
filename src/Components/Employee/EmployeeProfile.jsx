@@ -66,7 +66,7 @@ const EmployeeProfile = ({ employee, onClose, onRemove }) => {
           </div>
           <div className="detailRow">
             <strong>Date of Birth:</strong>{" "}
-            <span>{employeeData.dateOfBirth}</span>
+            <span>{employeeData.birthday}</span>
           </div>
           <div className="detailRow">
             <strong>ID Number:</strong> <span>{employeeData.idNumber}</span>

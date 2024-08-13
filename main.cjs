@@ -178,6 +178,8 @@ ipcMain.on("employee:add", function (e,formData) {
 
     const telephone_number = formData.telephone_number;
 
+    const birthday = formData.dateOfBirth;
+
     async function run() {
 
         try {
@@ -188,7 +190,7 @@ ipcMain.on("employee:add", function (e,formData) {
                     city: city
                 },
                 gender: gender,
-                birthday: registeredDate,
+                birthday: birthday,
                 registeredYear: registeredYear,
                 registeredMonth: registeredMonth,
                 registeredDay: registeredDay,
@@ -410,6 +412,7 @@ async function display_profile (employee_id){
                 name: employee.name,
                 address: `${employee.address.street}, ${employee.address.city}`,
                 gender: employee.gender,
+                birthday: employee.birthday,
                 registeredDate: `${employee.registeredYear}-${employee.registeredMonth}-${employee.registeredDay}`,
                 idNumber: employee.ID_number,
                 profilePicture: employee.image,
@@ -437,9 +440,66 @@ async function display_profile (employee_id){
 }
 
 
-//
+//opening the NIC and profile picture changes for the employee update
 
 
+let updated_imageData;
+
+let updated_NIC_imageData;
+
+//open the file dialog to select a profile picture
+
+ipcMain.on('open-file-update-dialog', async (event) => {
+
+    console.log("Received file open dialog request");
+
+    const result = await dialog.showOpenDialog(mainWindow, {
+        properties: ['openFile'],
+        filters: [
+            { name: 'Images', extensions: ['jpg', 'png', 'gif'] }
+        ]
+    });
+
+    if (!result.canceled) {
+        const filePath = result.filePaths[0];
+        const image_Data = await fs.readFile(filePath, 'base64');
+        updated_imageData = `data:image/png;base64,${image_Data}`
+        
+        mainWindow.webContents.send("send_profile:send",updated_imageData);
+    }
+});
+
+
+//open the file dialog to select an NIC picture
+
+ipcMain.on('open-NIC-update-dialog', async (event) => {
+
+    console.log("Received file open dialog request");
+
+    const result = await dialog.showOpenDialog(mainWindow, {
+        properties: ['openFile'],
+        filters: [
+            { name: 'Images', extensions: ['jpg', 'png', 'gif'] }
+        ]
+    });
+
+    if (!result.canceled) {
+        const NIC_filePath = result.filePaths[0];
+        const NIC_image_Data = await fs.readFile(NIC_filePath, 'base64');
+        updated_NIC_imageData = `data:image/png;base64,${NIC_image_Data}`
+
+        console.log("image data",updated_NIC_imageData);
+
+        mainWindow.webContents.send("send_NIC:send",updated_NIC_imageData);
+    }
+});
+
+
+
+
+
+
+//recieving the updated info on save
 
 ipcMain.on('send_edited_info:send',function(event,editedEmployee){
 
@@ -520,8 +580,8 @@ ipcMain.on('send_edited_info:send',function(event,editedEmployee){
                     employee.registeredMonth = registeredMonth;
                     employee.registeredDay = registeredDay;
                     employee.ID_number = editedEmployee.idNumber;
-                    employee.image = editedEmployee.profilePicture;
-                    employee.NIC_pic = editedEmployee.nicPicture;
+                    employee.image = updated_imageData;
+                    employee.NIC_pic = updated_NIC_imageData;
                     employee.contact.mobile_number = editedEmployee.mobile_number;
                     employee.contact.telephone_number = editedEmployee.telephone_number;
 
