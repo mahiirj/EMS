@@ -11,6 +11,7 @@ const EditEmployeeModal = ({ employee, onClose, onSave }) => {
 
   const handleSave = () => {
     onSave(editedEmployee);
+    window.electron.ipcRenderer.send("send_edited_info:send", editedEmployee);
     onClose();
   };
 
