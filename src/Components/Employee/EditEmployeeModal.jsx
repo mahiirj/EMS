@@ -116,12 +116,11 @@ const EditEmployeeModal = ({ employee, onClose, onSave }) => {
           </div>
           <div className="editRow">
             <strong>NIC Picture:</strong>
-            <input
-              type="text"
-              name="nicPicture"
-              value={editedEmployee.nicPicture}
-              onChange={handleChange}
-            />
+            <button>Change NIC picture</button>
+          </div>
+          <div className="editRow">
+            <strong>Profile Picture:</strong>
+            <button>Change Profile picture</button>
           </div>
         </div>
         <button className="saveButton" onClick={handleSave}>
