@@ -3,7 +3,6 @@ import "./AddItemModal.css";
 
 const AddItemModal = ({ onClose, onSave }) => {
   const [formData, setFormData] = useState({
-    id: "",
     itemName: "",
     subitems: [{ name: "", price: "" }],
   });
@@ -45,6 +44,9 @@ const AddItemModal = ({ onClose, onSave }) => {
     e.preventDefault();
     onSave(formData);
     onClose();
+
+    window.electron.ipcRenderer.send("item:add", formData);
+
   };
 
   return (

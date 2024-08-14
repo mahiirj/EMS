@@ -4,6 +4,9 @@ const fs = require('fs').promises;
 const mongoose = require("mongoose");
 const employee_details = require('./employee_details');
 const Counter = require('./counter');
+const { Item, Subpart } = require('./item_details');
+
+const item_details = Item;
 
 
 
@@ -599,6 +602,232 @@ ipcMain.on('send_edited_info:send',function(event,editedEmployee){
 
 
 });
+
+
+
+//adding an item to the database
+
+ipcMain.on("item:add", function (e,formData) {
+
+
+    async function addItem() {
+
+        try {
+
+            const item = new item_details({
+
+                    name: formData.itemName,
+
+                    subparts:formData.subitems,
+
+                    itemStatus: "active"
+
+                });
+            
+
+            await item.save();
+            
+
+            console.log(item);
+
+            console.log("item successfully added to the database");
+
+        } catch (e) {
+
+            console.log(e.message);
+        }
+    }
+
+    addItem();
+
+    
+});
+
+
+
+//recieve refresh items request
+
+ipcMain.on("refresh_items:send",function(){
+
+    iterateitems();
+
+
+});
+
+
+//get all the items currently exist in the database
+
+
+async function iterateitems(){
+
+    try{
+      
+      const items = await item_details.find();
+
+      let item_array = [];
+
+      items.forEach(item =>{
+          
+         
+        //   const item_id = item.itemID;
+
+        //   const item_name = item.name;
+        //   const item_status = item.itemStatus;
+
+          const item_subparts = item.subparts;
+
+          const subpart_array = [];
+
+          item_subparts.forEach(subpart=>{
+
+                let sub_object = {
+
+                    name: subpart.name,
+                    price: subpart.price
+                }
+
+                
+                subpart_array.push(sub_object);
+          })
+
+
+          item_object = {
+
+            id:item.itemID,
+            itemName:item.name,
+            status:item.itemStatus,
+            subitems:subpart_array
+            
+          }
+
+          item_array.push(item_object);
+
+        //   popupWindow4.webContents.send("punchout_list:send",item_id,item_name, item_status, subpart_array);
+
+          console.log(item);
+
+      })
+
+      mainWindow.webContents.send("item_list:send",item_array);
+
+  }catch(error){
+
+      console.log(error);
+
+      console.log("error iterating through the items");
+
+  }
+
+}
+
+
+//catching the search reqyuest from the main
+
+ipcMain.on("search_item:send",function(e,searchQuery){
+
+    search_items(searchQuery);
+
+});
+
+
+
+//search function to search through every item
+
+async function search_items(searchQuery) {
+
+    // Attempt to convert search_info to a number
+
+    const search_price = Number(searchQuery);
+    
+    const isNumber = !isNaN(search_price);
+
+    try {
+
+        let item_array = [];
+
+        const SearchCriteria = {
+            $or: [
+                { itemID: searchQuery},
+                { name: new RegExp(searchQuery, 'i') }, // Case-insensitive search for item name
+                { itemStatus: searchQuery },
+                {
+                    subparts: {
+
+                        $elemMatch: {
+
+                            $or: [
+                                { name: new RegExp(searchQuery, 'i') }, // Case-insensitive search for subpart name
+                                
+                                ...(isNumber ? [{ price: searchQuery }] : []) // Only include price condition if it's a valid number
+                            ]
+
+                        }
+                    }
+                }
+            ]
+        };
+
+        const matchingItems = await Item.find(SearchCriteria).exec();
+
+        // Clear the table before displaying the search results
+
+        // Assuming addWindow3 and the necessary setup exist in your application
+
+        // addWindow3.webContents.send("item_list:clear");
+
+
+        // Iterate through the matching items and send the data to the renderer process
+
+        matchingItems.forEach(item => {
+
+            const item_subparts = item.subparts;
+
+            const subpart_array = [];
+
+            item_subparts.forEach(subpart=>{
+
+                    let sub_object = {
+
+                        name: subpart.name,
+                        price: subpart.price
+                    }
+
+                    
+                    subpart_array.push(sub_object);
+            })
+
+
+            item_object = {
+
+                id:item.itemID,
+                itemName:item.name,
+                status:item.itemStatus,
+                subitems:subpart_array
+                
+            }
+
+            item_array.push(item_object);
+
+
+            // Send item details
+
+            // addWindow3.webContents.send("item_list:send", item_id, item_name,item_status,subpart_array);
+
+
+            console.log(item);
+
+            console.log("Items have been found successfully");
+        });
+
+        mainWindow.webContents.send("item_list:send",item_array);
+
+
+    } catch (error) {
+        console.error("Error searching items:", error);
+    }
+}
+
+
 
 
 

@@ -44,7 +44,9 @@ const AddEmployeeModal = ({ onClose, onSave }) => {
   };
 
   const onSubmit = (e) => {
+
     e.preventDefault();
+
     onClose();
 
     window.electron.ipcRenderer.send("employee:add", formData);

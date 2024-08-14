@@ -22,7 +22,9 @@ const EditItemModal = ({ item, onClose, onSave }) => {
 
   const handleSave = () => {
     onSave(editedItem);
+    
     onClose();
+
   };
 
   return (

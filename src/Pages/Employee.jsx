@@ -13,6 +13,7 @@ const Employee = () => {
   const [employee_Profile, setEmployeeProfile] = useState([]);
 
   useEffect(() => {
+    
     window.electron.ipcRenderer.on(
       "employee_list:send",
       function (e, employee_array) {

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import Sidebar from "../Components/Sidebar/Sidebar";
 import styles from "./Items.module.css";
 import ItemTable from "../Components/Items/ItemTable";
@@ -11,6 +11,19 @@ const Items = () => {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
+
+  useEffect(() => {
+    
+    window.electron.ipcRenderer.on(
+      "item_list:send",
+      function (e, item_array) {
+
+        setItemData(item_array);
+
+      }
+    );
+  
+  }, []);
 
   const handleAddNewItem = () => {
     setIsAddModalOpen(true);
@@ -45,12 +58,21 @@ const Items = () => {
 
   const handleSearchInputChange = (e) => {
     setSearchQuery(e.target.value);
+
   };
 
   const handleSearch = () => {
-    // Implement search functionality here if needed
+    
     console.log("Searching for:", searchQuery);
+
+    window.electron.ipcRenderer.send("search_item:send",searchQuery);
   };
+
+  const handleRefresh = () =>{
+
+    window.electron.ipcRenderer.send("refresh_items:send");
+
+  }
 
   return (
     <div className={styles.page}>
@@ -76,7 +98,7 @@ const Items = () => {
             <button onClick={handleAddNewItem} className={styles.addnew}>
               ADD NEW
             </button>
-            <button>REFRESH</button>
+            <button onClick={handleRefresh}>REFRESH</button>
           </div>
 
           <div className={styles.itemTable}>

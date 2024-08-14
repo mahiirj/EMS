@@ -14,7 +14,8 @@ const ItemProfile = ({ item, onClose, onRemove }) => {
   };
 
   const handleSave = (updatedItem) => {
-    // Implement the save logic here, e.g., send it to parent component or update state
+    //implement save logic here
+    
   };
 
   return (
