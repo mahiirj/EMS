@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./ItemProfile.css";
 import EditItemModal from "./EditItemModal";
 
-const ItemProfile = ({ item, onClose, onRemove }) => {
+const ItemProfile = ({ item, onClose, onRemove, onEdit }) => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   const handleOpenEditModal = () => {
@@ -14,8 +14,8 @@ const ItemProfile = ({ item, onClose, onRemove }) => {
   };
 
   const handleSave = (updatedItem) => {
-    //implement save logic here
-    
+    onEdit(updatedItem); // Update the parent state with the edited item
+    setIsEditModalOpen(false); // Close the edit modal
   };
 
   return (
@@ -57,7 +57,7 @@ const ItemProfile = ({ item, onClose, onRemove }) => {
         <EditItemModal
           item={item}
           onClose={handleCloseEditModal}
-          onSave={handleSave}
+          onSave={handleSave} // Pass the handleSave function to EditItemModal
         />
       )}
     </div>

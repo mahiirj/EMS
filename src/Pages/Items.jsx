@@ -1,10 +1,9 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Sidebar from "../Components/Sidebar/Sidebar";
 import styles from "./Items.module.css";
 import ItemTable from "../Components/Items/ItemTable";
 import AddItemModal from "../Components/Items/AddItemModal";
 import ItemProfile from "../Components/Items/ItemProfile";
-import EditItemModal from "../Components/Items/EditItemModal";
 
 const Items = () => {
   const [itemData, setItemData] = useState([]);
@@ -13,16 +12,9 @@ const Items = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
-    
-    window.electron.ipcRenderer.on(
-      "item_list:send",
-      function (e, item_array) {
-
-        setItemData(item_array);
-
-      }
-    );
-  
+    window.electron.ipcRenderer.on("item_list:send", function (e, item_array) {
+      setItemData(item_array);
+    });
   }, []);
 
   const handleAddNewItem = () => {
@@ -54,25 +46,21 @@ const Items = () => {
     setItemData((prevData) =>
       prevData.map((item) => (item.id === editedItem.id ? editedItem : item))
     );
+    setSelectedItem(editedItem); // Update the selected item with the edited data
   };
 
   const handleSearchInputChange = (e) => {
     setSearchQuery(e.target.value);
-
   };
 
   const handleSearch = () => {
-    
     console.log("Searching for:", searchQuery);
-
-    window.electron.ipcRenderer.send("search_item:send",searchQuery);
+    window.electron.ipcRenderer.send("search_item:send", searchQuery);
   };
 
-  const handleRefresh = () =>{
-
+  const handleRefresh = () => {
     window.electron.ipcRenderer.send("refresh_items:send");
-
-  }
+  };
 
   return (
     <div className={styles.page}>
@@ -119,7 +107,7 @@ const Items = () => {
           item={selectedItem}
           onClose={handleCloseProfile}
           onRemove={handleRemoveItem}
-          onEdit={handleEditItem}
+          onEdit={handleEditItem} // Pass handleEditItem to ItemProfile
         />
       )}
     </div>
