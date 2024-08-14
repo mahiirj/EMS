@@ -5,13 +5,9 @@ import Home from "../../Pages/Home";
 import Employee from "../../Pages/Employee";
 
 const Sidebar = () => {
-
-  const load_employees=(e)=>{
-     
+  const load_employees = (e) => {
     window.electron.ipcRenderer.send("employee_refresh");
-
-
-  }
+  };
 
   return (
     <div className="sidebar">
@@ -33,7 +29,9 @@ const Sidebar = () => {
           <li>
             <Link to="/Salary">Salary</Link>
           </li>
-          <li>Product</li>
+          <li>
+            <Link to="/Items">Items</Link>
+          </li>
         </ul>
         <br />
         <p>settings</p>

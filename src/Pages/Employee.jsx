@@ -48,8 +48,6 @@ const Employee = () => {
     setEmployeeData((prevData) => [...prevData, newEmployee]);
   };
 
-  
-
   const handleRowClick = (employeeData) => {
     let employee_id = employeeData.id;
     setSelectedEmployee(employee_id);
