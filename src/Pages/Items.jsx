@@ -25,9 +25,7 @@ const Items = () => {
     setIsAddModalOpen(false);
   };
 
-  const handleSaveNewItem = (newItem) => {
-    setItemData((prevData) => [...prevData, newItem]);
-  };
+  const handleSaveNewItem = (newItem) => {};
 
   const handleRowClick = (item) => {
     setSelectedItem(item);
