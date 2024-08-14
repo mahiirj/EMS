@@ -823,6 +823,8 @@ async function search_items(searchQuery) {
 
 
     } catch (error) {
+
+        //error message
         console.error("Error searching items:", error);
     }
 }
