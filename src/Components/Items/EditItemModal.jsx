@@ -24,6 +24,8 @@ const EditItemModal = ({ item, onClose, onSave }) => {
     onSave(editedItem);
     item = editedItem;
 
+    window.electron.ipcRenderer.send('item_send_edited_info:send',editedItem);
+
     onClose();
   };
 

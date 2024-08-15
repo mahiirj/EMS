@@ -6,7 +6,14 @@ import Employee from "../../Pages/Employee";
 
 const Sidebar = () => {
   const load_employees = (e) => {
+
     window.electron.ipcRenderer.send("employee_refresh");
+  };
+
+  const load_items = (e) =>{
+
+    window.electron.ipcRenderer.send("refresh_items:send");
+
   };
 
   return (
@@ -29,7 +36,7 @@ const Sidebar = () => {
           <li>
             <Link to="/Salary">Salary</Link>
           </li>
-          <li>
+          <li onClick={load_items}>
             <Link to="/Items">Items</Link>
           </li>
         </ul>

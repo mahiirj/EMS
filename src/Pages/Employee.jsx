@@ -20,7 +20,6 @@ const Employee = () => {
       }
     );
 
-    // hutttoo
 
     window.electron.ipcRenderer.on(
       "employee_profile:recieve",

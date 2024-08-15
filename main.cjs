@@ -831,6 +831,143 @@ async function search_items(searchQuery) {
 
 
 
+//item profile functionalities
+
+ipcMain.on("item_profile_id:send",async function(e,item_id){
+
+    console.log(item_id);
+
+
+    display_item_profile(item_id);
+
+
+
+})
+
+
+//item profile dispplay function
+
+    
+async function display_item_profile (item_id){
+
+    try{
+      
+      const items = await item_details.find();
+
+      items.forEach(item =>{
+          
+        if (item_id == item.itemID){
+
+            const item_subparts = item.subparts;
+
+            const subpart_array = [];
+
+            item_subparts.forEach(subpart=>{
+
+                    let sub_object = {
+
+                        name: subpart.name,
+                        price: subpart.price
+                    }
+
+                    
+                    subpart_array.push(sub_object);
+            })
+
+
+            item_object = {
+
+                id:item.itemID,
+                itemName:item.name,
+                status:item.itemStatus,
+                subitems:subpart_array
+                
+            }
+
+            mainWindow.webContents.send("item_profile:send",item_object);
+
+
+            console.log(item_object);
+
+        
+           
+        }})
+
+  }catch(error){
+
+      console.log(error);
+
+      console.log("error iterating through the profile items");
+
+  }
+
+}
+
+
+
+//recieve the edited info
+
+ipcMain.on('item_send_edited_info:send', async function(
+    event,
+    editedItem
+
+) {
+
+    console.log(editedItem);
+    // Function to update the edited item details in the database
+
+    async function update_items(
+        editedItem
+    ) {
+        // Find the item by itemID
+
+        const item = await item_details.findOne({ itemID: editedItem.id });
+
+        if (item) {
+
+            // Update item details
+
+            item.name = editedItem.itemName;
+
+            item.itemStatus = editedItem.status;
+
+            // Update subparts if they exist
+
+            item.subparts = editedItem.subitems;
+            
+
+            // Save the updated item to the database
+
+            await item.save();
+
+            console.log("Updated item:", item);
+
+        } else {
+            console.log("Item not found with ID:",editedItem.id);
+        }
+    }
+
+    // Call the update items function
+    update_items(
+        editedItem
+
+    ).catch(err => {
+
+        console.error("Error updating item:", err);
+    });
+
+});
+
+
+
+
+
+
+
+
+
+
+
 
 
 

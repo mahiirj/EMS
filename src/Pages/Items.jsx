@@ -10,11 +10,22 @@ const Items = () => {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
+ 
 
   useEffect(() => {
+
     window.electron.ipcRenderer.on("item_list:send", function (e, item_array) {
       setItemData(item_array);
     });
+
+    window.electron.ipcRenderer.on(
+      "item_profile:send",
+      function (e, item_object) {
+
+        setSelectedItem(item_object);
+
+      }
+    );
   }, []);
 
   const handleAddNewItem = () => {
@@ -29,6 +40,8 @@ const Items = () => {
 
   const handleRowClick = (item) => {
     setSelectedItem(item);
+    const item_id = item.id;
+    window.electron.ipcRenderer.send("item_profile_id:send",item_id);
   };
 
   const handleCloseProfile = () => {

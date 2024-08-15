@@ -17,7 +17,6 @@ const EmployeeTable = ({ employeeData, onRowClick }) => {
     setCurrentPicture(null);
   };
 
-  // nidimathai hutto
 
   return (
     <div className="tableContainer">
