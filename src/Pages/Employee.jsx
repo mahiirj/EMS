@@ -13,13 +13,14 @@ const Employee = () => {
   const [employee_Profile, setEmployeeProfile] = useState([]);
 
   useEffect(() => {
-    
     window.electron.ipcRenderer.on(
       "employee_list:send",
       function (e, employee_array) {
         setEmployeeData(employee_array);
       }
     );
+
+    // hutttoo
 
     window.electron.ipcRenderer.on(
       "employee_profile:recieve",
