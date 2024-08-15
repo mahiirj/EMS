@@ -34,7 +34,6 @@ const Attendance = () => {
         },
       ];
       setPunchData(newPunchData);
-      alert(`Employee ${employeeNumber} has punched in.`);
     } else if (actionType === "punchOut") {
       setCurrentEmployeeNumber(employeeNumber);
       setShowPunchOutModal(true);
@@ -59,7 +58,6 @@ const Attendance = () => {
     });
     setPunchData(updatedPunchData);
     setShowPunchOutModal(false);
-    alert(`Employee ${employeeNumber} has punched out.`);
   };
 
   return (
