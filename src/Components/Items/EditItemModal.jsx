@@ -20,6 +20,13 @@ const EditItemModal = ({ item, onClose, onSave }) => {
     }));
   };
 
+  const handleAddSubitem = () => {
+    setEditedItem((prev) => ({
+      ...prev,
+      subitems: [...prev.subitems, { name: "", price: "" }],
+    }));
+  };
+
   const handleRemoveSubitem = (index) => {
     setEditedItem((prev) => ({
       ...prev,
@@ -90,6 +97,13 @@ const EditItemModal = ({ item, onClose, onSave }) => {
               </button>
             </div>
           ))}
+          <button
+            type="button"
+            className="addButton"
+            onClick={handleAddSubitem}
+          >
+            Add Subitem
+          </button>
         </div>
         <button className="saveButton" onClick={handleSave}>
           Save
