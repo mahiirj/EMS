@@ -20,12 +20,16 @@ const EditItemModal = ({ item, onClose, onSave }) => {
     }));
   };
 
+  const handleRemoveSubitem = (index) => {
+    setEditedItem((prev) => ({
+      ...prev,
+      subitems: prev.subitems.filter((_, i) => i !== index),
+    }));
+  };
+
   const handleSave = () => {
     onSave(editedItem);
-    item = editedItem;
-
-    window.electron.ipcRenderer.send('item_send_edited_info:send',editedItem);
-
+    window.electron.ipcRenderer.send("item_send_edited_info:send", editedItem);
     onClose();
   };
 
@@ -56,9 +60,9 @@ const EditItemModal = ({ item, onClose, onSave }) => {
               onChange={handleChange}
             />
           </div>
+          <h3>Subitems</h3>
           {editedItem.subitems.map((subitem, index) => (
             <div className="editSubitem" key={index}>
-              <h4>Subitem {index + 1}</h4>
               <div className="editRow">
                 <strong>Name:</strong>
                 <input
@@ -77,6 +81,13 @@ const EditItemModal = ({ item, onClose, onSave }) => {
                   onChange={(e) => handleSubitemChange(index, e)}
                 />
               </div>
+              <button
+                type="button"
+                className="cancelButton"
+                onClick={() => handleRemoveSubitem(index)}
+              >
+                Remove Subitem
+              </button>
             </div>
           ))}
         </div>

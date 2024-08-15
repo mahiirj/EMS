@@ -1,11 +1,10 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import "./EditEmployeeModal.css";
 
 const EditEmployeeModal = ({ employee, onClose, onSave }) => {
   const [editedEmployee, setEditedEmployee] = useState({ ...employee });
 
   useEffect(() => {
-
     const handleProfileImageUpdate = (e, updated_imageData) => {
       setEditedEmployee((prev) => ({
         ...prev,
@@ -20,15 +19,12 @@ const EditEmployeeModal = ({ employee, onClose, onSave }) => {
       }));
     };
 
-
     window.electron.ipcRenderer.on(
-      "send_profile:send",handleProfileImageUpdate
-      
+      "send_profile:send",
+      handleProfileImageUpdate
     );
 
-    window.electron.ipcRenderer.on(
-      "send_NIC:send",handleNICImageUpdate
-    );
+    window.electron.ipcRenderer.on("send_NIC:send", handleNICImageUpdate);
 
     // return()=>{
 
@@ -49,17 +45,13 @@ const EditEmployeeModal = ({ employee, onClose, onSave }) => {
     onClose();
   };
 
-  const ChangeNIC = ()=>{
+  const ChangeNIC = () => {
+    window.electron.ipcRenderer.send("open-NIC-update-dialog");
+  };
 
-    window.electron.ipcRenderer.send('open-NIC-update-dialog');
-
-  }
-
-  const ChangeProfile = () =>{
-
-    window.electron.ipcRenderer.send('open-file-update-dialog');
-
-  }
+  const ChangeProfile = () => {
+    window.electron.ipcRenderer.send("open-file-update-dialog");
+  };
 
   return (
     <div className="modalOverlay">
