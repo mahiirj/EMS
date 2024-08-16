@@ -32,6 +32,8 @@ const Home = () => {
           </div>
         </div>
 
+        <br />
+
         <div className="attendance">
           <Attendance />
         </div>

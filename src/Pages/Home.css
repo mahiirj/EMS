@@ -28,7 +28,7 @@
 }
 
 .que-card {
-  background-color: rgb(68, 220, 231);
+  background-color: rgba(68, 220, 231, 0.116);
   border-radius: 15px;
   padding: 10px 30px;
   width: 200px;
@@ -41,7 +41,7 @@
   position: absolute;
   font-weight: 700;
   font-size: 22px;
-  margin-bottom: 50px;
+  margin-bottom: 70px;
 }
 
 .left {

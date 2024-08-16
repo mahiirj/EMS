@@ -47,7 +47,7 @@
 .title {
   display: flex;
   flex-direction: row;
-  gap: 500px;
+  gap: 470px;
 }
 
 .title h1 {
