@@ -11,8 +11,12 @@ const Employee = () => {
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [employee_Profile, setEmployeeProfile] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
 
   useEffect(() => {
+
+
     window.electron.ipcRenderer.on(
       "employee_list:send",
       function (e, employee_array) {
@@ -24,9 +28,12 @@ const Employee = () => {
       "employee_profile:recieve",
       function (e, employeeProfile) {
         setEmployeeProfile(employeeProfile);
+        setIsLoading(false); // Stop loading when profile data is received
         // setSelectedEmployee(employeeProfile.id);
       }
     );
+
+
 
     // return()=>{
 
@@ -49,14 +56,17 @@ const Employee = () => {
   };
 
   const handleRowClick = (employeeData) => {
-    alert(employeeData.id);
+    
     let employee_id = employeeData.id;
     setSelectedEmployee(employee_id);
+    setIsLoading(true); // Start loading when a row is clicked
     window.electron.ipcRenderer.send("profile_id:send", employee_id);
   };
 
   const handleCloseProfile = () => {
     setSelectedEmployee(null);
+    setEmployeeProfile(null);
+    setIsLoading(false); 
   };
 
   const handleRemoveEmployee = (id) => {
@@ -127,13 +137,16 @@ const Employee = () => {
         />
       )}
 
-      {selectedEmployee && (
+      {selectedEmployee && !isLoading && employee_Profile && (
         <EmployeeProfile
           employee={employee_Profile}
           onClose={handleCloseProfile}
           onRemove={handleRemoveEmployee}
         />
       )}
+
+      
+
     </div>
   );
 };

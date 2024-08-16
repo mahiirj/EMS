@@ -672,6 +672,7 @@ async function iterateitems(){
         //   const item_id = item.itemID;
 
         //   const item_name = item.name;
+        
         //   const item_status = item.itemStatus;
 
           const item_subparts = item.subparts;
@@ -828,7 +829,6 @@ async function search_items(searchQuery) {
         console.error("Error searching items:", error);
     }
 }
-
 
 
 //item profile functionalities
