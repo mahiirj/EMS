@@ -1,45 +1,21 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import styles from "./PunchOutModal.module.css";
 
-// Initializing the array with the format provided
-const itemArray = [
-  {
-    _id: "66bd2807f213aa3943c2124d",
-    name: "Shirt",
-    subparts: [{ name: "Collar", price: 60, _id: "66bf0727ef07043b89931539" }],
-    itemStatus: "active",
-    itemID: "I1",
-  },
-  {
-    _id: "66bd2847f213aa3943c2125f",
-    name: "Trouser",
-    subparts: [
-      { name: "Hem", price: 1000, _id: "66bf0741ef07043b89931544" },
-      { name: "Side", price: 200, _id: "66bf0741ef07043b89931545" },
-    ],
-    itemStatus: "active",
-    itemID: "I2",
-  },
-  {
-    _id: "66bd3300a138b76613327749",
-    name: "Tom",
-    subparts: [{ name: "Wee", price: 300, _id: "66bd3300a138b7661332774a" }],
-    itemStatus: "active",
-    itemID: "I3",
-  },
-  {
-    _id: "66bd3480bbdb4d2fc144cbd4",
-    name: "WW",
-    subparts: [{ name: "WW", price: 23, _id: "66bd3480bbdb4d2fc144cbd5" }],
-    itemStatus: "active",
-    itemID: "I4",
-  },
-];
 
 const PunchOutModal = ({ employeeNumber, onClose, onSubmit }) => {
   const [selectedItem, setSelectedItem] = useState(null);
   const [selectedParts, setSelectedParts] = useState([]);
   const [showParts, setShowParts] = useState(false);
+  const [itemArray, setItemData] = useState([]);
+
+  useEffect(() => {
+
+    window.electron.ipcRenderer.on("item_list:send", function (e, item_array) {
+      setItemData(item_array);
+    });
+  
+   
+  }, []);
 
   const handleCheckboxChange = (part) => {
     setSelectedParts((prevSelectedParts) =>
@@ -80,8 +56,8 @@ const PunchOutModal = ({ employeeNumber, onClose, onSubmit }) => {
                   onClick={() => handleRowClick(item)}
                   className={selectedItem === item ? styles.selectedRow : ""}
                 >
-                  <td>{item.itemID}</td>
-                  <td>{item.name}</td>
+                  <td>{item.id}</td>
+                  <td>{item.itemName}</td>
                 </tr>
               ))}
             </tbody>
@@ -91,7 +67,7 @@ const PunchOutModal = ({ employeeNumber, onClose, onSubmit }) => {
           <div className={styles.formGroup}>
             <h3>Parts Sewed for {selectedItem.name}</h3>
             <div className={styles.partsContainer}>
-              {selectedItem.subparts.map((subitem) => (
+              {selectedItem.subitems.map((subitem) => (
                 <div key={subitem._id} className={styles.partItem}>
                   <input
                     type="checkbox"
