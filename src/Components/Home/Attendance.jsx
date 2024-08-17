@@ -35,6 +35,9 @@ const Attendance = () => {
       ];
       setPunchData(newPunchData);
     } else if (actionType === "punchOut") {
+      // Send request to fetch item list before showing the modal
+      window.electron.ipcRenderer.send("refresh_items:send");
+      // Set the current employee number and show the modal
       setCurrentEmployeeNumber(employeeNumber);
       setShowPunchOutModal(true);
     }
@@ -58,6 +61,9 @@ const Attendance = () => {
     });
     setPunchData(updatedPunchData);
     setShowPunchOutModal(false);
+
+    // Send request to refresh items
+    window.electron.ipcRenderer.send("refresh_items:send");
   };
 
   return (
@@ -95,7 +101,7 @@ const Attendance = () => {
             Punch Out
           </button>
         </div>
-        <div className="formActions">
+        <div className="submitContainer">
           <button
             type="button"
             onClick={handleSubmit}
