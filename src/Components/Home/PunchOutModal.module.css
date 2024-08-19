@@ -1,86 +1,115 @@
 .modal {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(0, 0, 0, 0.5);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  padding: 30px;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.2);
   z-index: 1000;
+  width: 90%; /* Increased width for better spacing */
+  max-width: 1000px; /* Larger max width */
+  border-radius: 8px; /* Added border radius for smoother edges */
 }
 
 .modalContent {
-  background: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  max-width: 600px;
-  width: 100%;
-  max-height: 80%;
-  overflow-y: auto; /* Ensure scrollable */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 900px;
+  margin: 0 auto;
 }
 
 .formGroup {
-  margin-bottom: 15px;
+  margin-bottom: 30px;
 }
 
 .clothingTable {
   width: 100%;
   border-collapse: collapse;
+  margin-bottom: 20px; /* Added margin to space out tables */
 }
 
 .clothingTable th,
 .clothingTable td {
-  padding: 10px;
+  padding: 12px; /* Increased padding for better readability */
   border: 1px solid #ddd;
   text-align: left;
+  font-size: 14px; /* Slightly larger font size */
 }
 
 .selectedRow {
-  background-color: #e9ecef;
+  background-color: #f5f5f5; /* Softer background color */
 }
 
-.partsContainer {
+.itemtable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.itemtable th,
+.itemtable td {
+  padding: 12px; /* Increased padding */
+  border: 1px solid #ddd;
+  text-align: left;
+  font-size: 14px;
+}
+
+.subitemList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.subitem {
   display: flex;
-  flex-wrap: wrap; /* Allow wrapping to next line if needed */
-  gap: 10px; /* Add space between items */
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0; /* Increased padding */
+  border-bottom: 1px solid #eee;
 }
 
-.partItem {
+.subitemDetails {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.quantityControls {
   display: flex;
   align-items: center;
-  width: calc(50% - 10px); /* Adjust width as needed */
+  gap: 10px; /* Increased gap for better button spacing */
 }
 
-.checkbox {
-  margin-right: 5px; /* Space between checkbox and label */
+.quantityButton {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 6px 12px; /* Increased button size */
+  cursor: pointer;
+  border-radius: 4px; /* Added border radius for smoother buttons */
 }
 
-.checkboxLabel {
-  margin: 0;
+.quantity {
+  padding: 0 10px;
+  font-weight: bold; /* Bold font for quantity */
 }
 
 .formActions {
   display: flex;
-  justify-content: center;
-  margin-top: 20px;
+  justify-content: flex-end;
+  gap: 15px; /* Increased gap between action buttons */
+  margin-top: 20px; /* Added margin to separate from the table */
 }
 
 .button {
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.button.punchOut {
-  background-color: #dc3545;
-}
-
-.button.active {
+  padding: 12px 24px; /* Increased padding */
   background-color: #28a745;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.button:hover {
+  scale: 1.1;
 }

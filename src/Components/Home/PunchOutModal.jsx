@@ -1,39 +1,67 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./PunchOutModal.module.css";
 
-
 const PunchOutModal = ({ employeeNumber, onClose, onSubmit }) => {
-  const [selectedItem, setSelectedItem] = useState(null);
-  const [selectedParts, setSelectedParts] = useState([]);
-  const [showParts, setShowParts] = useState(false);
+  const [selectedItems, setSelectedItems] = useState([]);
   const [itemArray, setItemData] = useState([]);
 
   useEffect(() => {
-
     window.electron.ipcRenderer.on("item_list:send", function (e, item_array) {
       setItemData(item_array);
     });
-  
-   
   }, []);
 
-  const handleCheckboxChange = (part) => {
-    setSelectedParts((prevSelectedParts) =>
-      prevSelectedParts.includes(part)
-        ? prevSelectedParts.filter((item) => item !== part)
-        : [...prevSelectedParts, part]
+  const handleRowClick = (item) => {
+    if (!selectedItems.some((selected) => selected.id === item.id)) {
+      setSelectedItems((prevSelectedItems) => [
+        ...prevSelectedItems,
+        {
+          ...item,
+          subitems: item.subitems.map((subitem) => ({
+            ...subitem,
+            quantity: 0,
+          })),
+        },
+      ]);
+    }
+  };
+
+  const handleQuantityChange = (itemId, subitemName, change) => {
+    setSelectedItems((prevSelectedItems) =>
+      prevSelectedItems.map((item) =>
+        item.id === itemId
+          ? {
+              ...item,
+              subitems: item.subitems.map((subitem) =>
+                subitem.name === subitemName
+                  ? {
+                      ...subitem,
+                      quantity: Math.max(subitem.quantity + change, 0),
+                    }
+                  : subitem
+              ),
+            }
+          : item
+      )
     );
   };
 
-  const handleRowClick = (item) => {
-    setSelectedItem(item);
-    setShowParts(true);
+  const calculateTotal = () => {
+    return selectedItems.reduce((total, item) => {
+      return (
+        total +
+        item.subitems.reduce(
+          (subTotal, subitem) => subTotal + subitem.quantity * subitem.price,
+          0
+        )
+      );
+    }, 0);
   };
 
   const handleSubmit = () => {
-    onSubmit({ employeeNumber, selectedItem, partsData: selectedParts });
+    onSubmit({ employeeNumber, selectedItems });
     onClose();
-    alert(JSON.stringify(selectedParts));
+    alert(JSON.stringify(selectedItems));
   };
 
   return (
@@ -54,7 +82,13 @@ const PunchOutModal = ({ employeeNumber, onClose, onSubmit }) => {
                 <tr
                   key={item._id}
                   onClick={() => handleRowClick(item)}
-                  className={selectedItem === item ? styles.selectedRow : ""}
+                  className={
+                    selectedItems.some(
+                      (selectedItem) => selectedItem.id === item.id
+                    )
+                      ? styles.selectedRow
+                      : ""
+                  }
                 >
                   <td>{item.id}</td>
                   <td>{item.itemName}</td>
@@ -63,30 +97,92 @@ const PunchOutModal = ({ employeeNumber, onClose, onSubmit }) => {
             </tbody>
           </table>
         </div>
-        {showParts && selectedItem && (
+
+        {selectedItems.length > 0 && (
           <div className={styles.formGroup}>
-            <h3>Parts Sewed for {selectedItem.name}</h3>
-            <div className={styles.partsContainer}>
-              {selectedItem.subitems.map((subitem) => (
-                <div key={subitem._id} className={styles.partItem}>
-                  <input
-                    type="checkbox"
-                    id={subitem.name}
-                    checked={selectedParts.includes(subitem.name)}
-                    onChange={() => handleCheckboxChange(subitem.name)}
-                    className={styles.checkbox}
-                  />
-                  <label
-                    htmlFor={subitem.name}
-                    className={styles.checkboxLabel}
-                  >
-                    {subitem.name} - ${subitem.price}
-                  </label>
-                </div>
-              ))}
+            <h3>Selected Items and Parts</h3>
+            <div className="table">
+              <table className={styles.itemtable}>
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Item</th>
+                    <th>Subparts</th>
+                    <th>Total</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {selectedItems.map((item) => (
+                    <tr key={item.id}>
+                      <td>{item.id}</td>
+                      <td>{item.itemName}</td>
+                      <td>
+                        <ul className={styles.subitemList}>
+                          {item.subitems.map((subitem) => (
+                            <li key={subitem.name} className={styles.subitem}>
+                              <div className={styles.subitemDetails}>
+                                <span>{subitem.name}</span>
+                                <span>
+                                  ${subitem.price} x {subitem.quantity}
+                                </span>
+                                <div className={styles.quantityControls}>
+                                  <button
+                                    onClick={() =>
+                                      handleQuantityChange(
+                                        item.id,
+                                        subitem.name,
+                                        -1
+                                      )
+                                    }
+                                    className={styles.quantityButton}
+                                  >
+                                    -
+                                  </button>
+                                  <span className={styles.quantity}>
+                                    {subitem.quantity}
+                                  </span>
+                                  <button
+                                    onClick={() =>
+                                      handleQuantityChange(
+                                        item.id,
+                                        subitem.name,
+                                        1
+                                      )
+                                    }
+                                    className={styles.quantityButton}
+                                  >
+                                    +
+                                  </button>
+                                </div>
+                              </div>
+                            </li>
+                          ))}
+                        </ul>
+                      </td>
+                      <td>
+                        $
+                        {item.subitems.reduce(
+                          (total, subitem) =>
+                            total + subitem.quantity * subitem.price,
+                          0
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                  <tr>
+                    <td colSpan="3" style={{ textAlign: "right" }}>
+                      <strong>Grand Total:</strong>
+                    </td>
+                    <td>
+                      <strong>${calculateTotal()}</strong>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
         )}
+
         <div className={styles.formActions}>
           <button onClick={handleSubmit} className={styles.button}>
             Submit
