@@ -114,3 +114,20 @@
 .button:hover {
   scale: 1.1;
 }
+
+.removeButton {
+  background-color: #dc3545; /* Red color for remove button */
+  color: white;
+  border: none;
+  padding: 6px 12px; /* Same size as other buttons */
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.removeButton:hover {
+  scale: 1.1;
+}
+
+.remove {
+  width: 10%;
+}

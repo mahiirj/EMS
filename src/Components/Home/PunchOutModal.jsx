@@ -46,6 +46,12 @@ const PunchOutModal = ({ employeeNumber, onClose, onSubmit }) => {
     );
   };
 
+  const handleRemoveItem = (itemId) => {
+    setSelectedItems((prevSelectedItems) =>
+      prevSelectedItems.filter((item) => item.id !== itemId)
+    );
+  };
+
   const calculateTotal = () => {
     return selectedItems.reduce((total, item) => {
       return (
@@ -109,6 +115,7 @@ const PunchOutModal = ({ employeeNumber, onClose, onSubmit }) => {
                     <th>Item</th>
                     <th>Subparts</th>
                     <th>Total</th>
+                    <th>Actions</th> {/* Added Actions column */}
                   </tr>
                 </thead>
                 <tbody>
@@ -167,10 +174,18 @@ const PunchOutModal = ({ employeeNumber, onClose, onSubmit }) => {
                           0
                         )}
                       </td>
+                      <td className={styles.remove}>
+                        <button
+                          onClick={() => handleRemoveItem(item.id)}
+                          className={styles.removeButton}
+                        >
+                          Remove
+                        </button>
+                      </td>
                     </tr>
                   ))}
                   <tr>
-                    <td colSpan="3" style={{ textAlign: "right" }}>
+                    <td colSpan="4" style={{ textAlign: "right" }}>
                       <strong>Grand Total:</strong>
                     </td>
                     <td>
