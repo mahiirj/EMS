@@ -10,6 +10,7 @@
   width: 90%; /* Increased width for better spacing */
   max-width: 1000px; /* Larger max width */
   border-radius: 8px; /* Added border radius for smoother edges */
+  overflow: scroll;
 }
 
 .modalContent {
