@@ -13,6 +13,11 @@ const PunchOutModal = ({ employeeNumber, onClose, onSubmit }) => {
 
   const handleRowClick = (item) => {
     if (!selectedItems.some((selected) => selected.id === item.id)) {
+      const initialTotal = item.subitems.reduce(
+        (sum, subitem) => sum + subitem.price * 0,
+        0
+      );
+
       setSelectedItems((prevSelectedItems) => [
         ...prevSelectedItems,
         {
@@ -21,6 +26,7 @@ const PunchOutModal = ({ employeeNumber, onClose, onSubmit }) => {
             ...subitem,
             quantity: 0,
           })),
+          total: initialTotal,
         },
       ]);
     }
@@ -40,6 +46,14 @@ const PunchOutModal = ({ employeeNumber, onClose, onSubmit }) => {
                     }
                   : subitem
               ),
+              total: item.subitems.reduce(
+                (sum, subitem) =>
+                  sum +
+                  (subitem.name === subitemName
+                    ? Math.max(subitem.quantity + change, 0) * subitem.price
+                    : subitem.quantity * subitem.price),
+                0
+              ),
             }
           : item
       )
@@ -53,21 +67,13 @@ const PunchOutModal = ({ employeeNumber, onClose, onSubmit }) => {
   };
 
   const calculateTotal = () => {
-    return selectedItems.reduce((total, item) => {
-      return (
-        total +
-        item.subitems.reduce(
-          (subTotal, subitem) => subTotal + subitem.quantity * subitem.price,
-          0
-        )
-      );
-    }, 0);
+    return selectedItems.reduce((total, item) => total + item.total, 0);
   };
 
   const handleSubmit = () => {
     onSubmit({ employeeNumber, selectedItems });
     onClose();
-    alert(JSON.stringify(selectedItems));
+    console.log(selectedItems);
   };
 
   return (
@@ -115,7 +121,7 @@ const PunchOutModal = ({ employeeNumber, onClose, onSubmit }) => {
                     <th>Item</th>
                     <th>Subparts</th>
                     <th>Total</th>
-                    <th>Actions</th> {/* Added Actions column */}
+                    <th>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -166,14 +172,7 @@ const PunchOutModal = ({ employeeNumber, onClose, onSubmit }) => {
                           ))}
                         </ul>
                       </td>
-                      <td>
-                        $
-                        {item.subitems.reduce(
-                          (total, subitem) =>
-                            total + subitem.quantity * subitem.price,
-                          0
-                        )}
-                      </td>
+                      <td>${item.total}</td>
                       <td className={styles.remove}>
                         <button
                           onClick={() => handleRemoveItem(item.id)}
