@@ -9,6 +9,7 @@ const PunchOutModal = ({ employeeNumber, onClose, onSubmit }) => {
     window.electron.ipcRenderer.on("item_list:send", function (e, item_array) {
       setItemData(item_array);
     });
+
   }, []);
 
   const handleRowClick = (item) => {
@@ -71,9 +72,16 @@ const PunchOutModal = ({ employeeNumber, onClose, onSubmit }) => {
   };
 
   const handleSubmit = () => {
+
     onSubmit({ employeeNumber, selectedItems });
+
+    window.electron.ipcRenderer.send("punchout_data:save",selectedItems);
+
+
     onClose();
-    console.log(selectedItems);
+
+   
+
   };
 
   return (

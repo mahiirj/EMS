@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import "./Attendance.css";
 import PunchDataTable from "./PunchDataTable";
 import PunchOutModal from "./PunchOutModal";
@@ -10,12 +10,32 @@ const Attendance = () => {
   const [showTable, setShowTable] = useState(false);
   const [showPunchOutModal, setShowPunchOutModal] = useState(false);
   const [currentEmployeeNumber, setCurrentEmployeeNumber] = useState("");
+  const [currentEmployeeName, setCurrentEmployeeName] = useState(null);
+
+  useEffect(() => {
+
+    window.electron.ipcRenderer.on("obtained_name:send", function (e,employee_name) {
+
+      setCurrentEmployeeName(employee_name);
+
+    });
+
+  }, []);
 
   const handleActionClick = (type) => {
+
     setActionType(type);
+
+    if(actionType== "punchIn"){
+
+      window.electron.ipcRenderer.send("obtain_name:send",employeeNumber);
+
+    }
+
   };
 
   const handleSubmit = () => {
+
     if (employeeNumber === "") {
       alert("Please enter the employee number.");
       return;
@@ -24,15 +44,20 @@ const Attendance = () => {
     const currentTime = new Date().toLocaleString();
 
     if (actionType === "punchIn") {
+
+      
+
+    
       const newPunchData = [
         ...punchData,
         {
           employeeNumber,
-          name: "",
+          name: currentEmployeeName,
           punchInTime: currentTime,
           punchOutTime: "Active",
         },
       ];
+    
       setPunchData(newPunchData);
     } else if (actionType === "punchOut") {
       // Send request to fetch item list before showing the modal
@@ -47,6 +72,7 @@ const Attendance = () => {
   };
 
   const handlePunchOutSubmit = (details) => {
+
     const { employeeNumber, selectedItem, partsData } = details;
     const currentTime = new Date().toLocaleString();
 

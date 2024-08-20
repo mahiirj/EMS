@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const employee_details = require('./employee_details');
 const Counter = require('./counter');
 const { Item, Subpart } = require('./item_details');
+const attendance_details = require('./attendance_details');
 
 const item_details = Item;
 
@@ -957,6 +958,196 @@ ipcMain.on('item_send_edited_info:send', async function(
     });
 
 });
+
+
+//obtain the name for the attendance table
+
+
+ipcMain.on("obtain_name:send",function(e,punched_id){
+
+
+    obtain_name(punched_id);
+
+    async function obtain_name(punched_id){
+
+        try{
+
+        
+            const employee = await employee_details.findOne({ employeeID: punched_id });
+
+
+            const employee_name = employee.name;
+
+            mainWindow.webContents.send("obtained_name:send",employee_name);
+        }
+
+        catch(error){
+
+            console.log(error);
+
+        }
+
+
+    }
+
+    
+})
+
+
+//recieving the attendance data from the attendance window to save it to the database
+
+
+ipcMain.on("punchout_data:save",async function(e,selectedItems){
+
+
+    console.log("selected items array");
+    
+    console.log(selectedItems);
+
+    console.log(selectedItems.subitems);
+
+
+    //creating a new object to only get the wanted data to append to the scheme
+
+    
+
+
+    //function for appending data to the database
+
+    async function add_attendance() {
+
+
+        try {
+
+            const attendance = new attendance_details({
+
+                    // daily_payment: add_total,
+
+                    // name: selectedItems.name,
+
+                    // Punch_in_time: selected_items.
+
+                    // Punch_out_time: punchout_time,
+
+                    // Year: year,
+
+                    // Month: month,
+
+                    // Day: day,
+
+                    // employeeID: punched_id_text,
+
+                    // products_done: object_hold
+
+                });
+            
+
+            await attendance.save();
+            
+
+            console.log(attendance);
+
+            console.log("attendance record successfully added to the database");
+
+        } catch (e) {
+
+            console.log(e.message);
+        }
+    }
+
+    await add_attendance();
+
+
+    // //query to find if the salary details are available already in the database based on year month and the employee id or name
+
+
+    // const query = {
+    //     Year: year,
+    //     Month: month,
+    //     $or: [
+    //         { employeeID: punched_id_text },
+    //         { employee_name: add_name}
+    //     ]
+    // };
+
+
+    // //finding the salary record based on the recieved details
+
+    
+    // const salary_record = await salary_details.findOne(query);
+
+    // if(salary_record==null){
+
+    //     await add_salary();
+    // }
+    // else{
+
+    //     await update_salary(salary_record);
+
+    // }
+
+
+    // //adding the salary details if there are none matching
+
+
+    // async function add_salary() {
+
+
+    //     try {
+
+    //         const salary = new salary_details({
+
+    //             employeeID: punched_id_text,
+
+    //             employee_name: add_name,
+          
+    //             Year: year,
+          
+    //             Month: month,
+          
+    //             Salary: add_total,
+          
+    //             Status: "Due",
+
+    //         });
+            
+
+    //         await salary.save();
+            
+    //         //send the just now saved item details to the addwindow3
+
+    //         console.log(salary);
+
+    //         console.log("salary record successfully added to the database");
+
+    //     } catch (e) {
+
+    //         console.log(e.message);
+    //     }
+    // }
+
+
+    // //updating the salary details if there are matching items with the month and the year
+
+    // async function update_salary(salary_record) {
+
+    //     try {
+
+    //         await salary_record.updateOne({ $inc: { Salary: add_total } });
+
+    //         console.log(salary_record);
+
+    //         console.log("Salary record successfully updated in the database");
+
+    //     } catch (e) {
+
+    //         console.log(e.message);
+    //     }
+    // }
+
+
+
+})
 
 
 
