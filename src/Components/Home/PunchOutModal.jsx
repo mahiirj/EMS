@@ -9,16 +9,10 @@ const PunchOutModal = ({ employeeNumber, onClose, onSubmit }) => {
     window.electron.ipcRenderer.on("item_list:send", function (e, item_array) {
       setItemData(item_array);
     });
-
   }, []);
 
   const handleRowClick = (item) => {
     if (!selectedItems.some((selected) => selected.id === item.id)) {
-      const initialTotal = item.subitems.reduce(
-        (sum, subitem) => sum + subitem.price * 0,
-        0
-      );
-
       setSelectedItems((prevSelectedItems) => [
         ...prevSelectedItems,
         {
@@ -27,7 +21,6 @@ const PunchOutModal = ({ employeeNumber, onClose, onSubmit }) => {
             ...subitem,
             quantity: 0,
           })),
-          total: initialTotal,
         },
       ]);
     }
@@ -47,14 +40,6 @@ const PunchOutModal = ({ employeeNumber, onClose, onSubmit }) => {
                     }
                   : subitem
               ),
-              total: item.subitems.reduce(
-                (sum, subitem) =>
-                  sum +
-                  (subitem.name === subitemName
-                    ? Math.max(subitem.quantity + change, 0) * subitem.price
-                    : subitem.quantity * subitem.price),
-                0
-              ),
             }
           : item
       )
@@ -67,21 +52,38 @@ const PunchOutModal = ({ employeeNumber, onClose, onSubmit }) => {
     );
   };
 
-  const calculateTotal = () => {
-    return selectedItems.reduce((total, item) => total + item.total, 0);
+  const prepareSubmissionData = () => {
+    return selectedItems
+      .map((item) => {
+        const selectedSubitems = item.subitems.filter(
+          (subitem) => subitem.quantity > 0
+        );
+
+        if (selectedSubitems.length === 0) return null; // Skip items with no selected subitems
+
+        const total = selectedSubitems.reduce(
+          (sum, subitem) => sum + subitem.quantity * subitem.price,
+          0
+        );
+
+        return {
+          id: item.id,
+          itemName: item.itemName,
+          subitems: selectedSubitems,
+          total,
+        };
+      })
+      .filter(Boolean); // Remove null entries from the array
   };
 
   const handleSubmit = () => {
+    const submissionData = prepareSubmissionData();
+    console.log("Data being sent:", { employeeNumber, submissionData });
+    onSubmit({ employeeNumber, selectedItems: submissionData });
 
-    onSubmit({ employeeNumber, selectedItems });
-
-    window.electron.ipcRenderer.send("punchout_data:save",selectedItems);
-
+    window.electron.ipcRenderer.send("punchout_data:save", submissionData);
 
     onClose();
-
-   
-
   };
 
   return (
@@ -180,7 +182,14 @@ const PunchOutModal = ({ employeeNumber, onClose, onSubmit }) => {
                           ))}
                         </ul>
                       </td>
-                      <td>${item.total}</td>
+                      <td>
+                        $
+                        {item.subitems.reduce(
+                          (sum, subitem) =>
+                            sum + subitem.quantity * subitem.price,
+                          0
+                        )}
+                      </td>
                       <td className={styles.remove}>
                         <button
                           onClick={() => handleRemoveItem(item.id)}
@@ -196,7 +205,19 @@ const PunchOutModal = ({ employeeNumber, onClose, onSubmit }) => {
                       <strong>Grand Total:</strong>
                     </td>
                     <td>
-                      <strong>${calculateTotal()}</strong>
+                      <strong>
+                        $
+                        {selectedItems.reduce(
+                          (total, item) =>
+                            total +
+                            item.subitems.reduce(
+                              (sum, subitem) =>
+                                sum + subitem.quantity * subitem.price,
+                              0
+                            ),
+                          0
+                        )}
+                      </strong>
                     </td>
                   </tr>
                 </tbody>
