@@ -1043,6 +1043,9 @@ ipcMain.on("punchout_data:save",async function(e,submissionData){
     console.log(`Day: ${day}`);     // Output: "Day: 21"
 
 
+    
+
+
     //function for appending data to the database
 
     async function add_attendance() {
@@ -1209,7 +1212,7 @@ ipcMain.on("attendance_search:send", async function(e, employeeIdOrName, year, m
             console.log(records);
 
             mainWindow.webContents.send("attendance_search:result", records);
-            
+
         } catch (err) {
             console.error(err);
         }

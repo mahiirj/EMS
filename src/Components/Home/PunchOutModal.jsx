@@ -7,9 +7,11 @@ const PunchOutModal = ({ employeeNumber, onClose, onSubmit, punchData }) => {
   const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
-    
+
     window.electron.ipcRenderer.on("item_list:send", function (e, item_array) {
+
       setItemData(item_array);
+      
     });
 
     window.electron.ipcRenderer.on("item_list:send",function(e,item_array){

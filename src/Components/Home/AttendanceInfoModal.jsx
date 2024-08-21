@@ -3,6 +3,8 @@
 import React, { useState,useEffect } from "react";
 import "./AttendanceInfoModal.css";
 
+//attendance fake
+
 const AttendanceInfoModal = ({ onClose }) => {
   const [employeeIdOrName, setEmployeeIdOrName] = useState("");
   const [day, setDay] = useState("");
