@@ -1,6 +1,6 @@
 // AttendanceInfoModal.js
 
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import "./AttendanceInfoModal.css";
 
 const AttendanceInfoModal = ({ onClose }) => {
@@ -9,14 +9,24 @@ const AttendanceInfoModal = ({ onClose }) => {
   const [month, setMonth] = useState("");
   const [year, setYear] = useState("");
 
+  useEffect(() => {
+
+    window.electron.ipcRenderer.on(
+      "attendance_search:result",
+
+      function (e, records) {
+
+           
+      }
+    );
+
+  }, []);
+
   const handleSubmit = () => {
+
     // Handle form submission logic
-    console.log({
-      employeeIdOrName,
-      day,
-      month,
-      year,
-    });
+    
+    window.electron.ipcRenderer.send("attendance_search:send",employeeIdOrName,year,month,day);
   };
 
   return (

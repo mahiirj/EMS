@@ -1108,6 +1108,120 @@ ipcMain.on("punchout_data:save",async function(e,submissionData){
 
 
 
+//recieving the attendance search requests
+
+ipcMain.on("attendance_search:send", async function(e, employeeIdOrName, year, month, day) {
+
+    // Convert all inputs to strings
+
+    const employeeIdOrNameStr = employeeIdOrName ? String(employeeIdOrName).trim() : '';
+    const yearStr = year ? String(year).trim() : '';
+    const monthStr = month ? String(month).trim() : '';
+    const dayStr = day ? String(day).trim() : '';
+
+
+    // If only the employee ID or name is available, get the past 10 records of attendance
+
+    if (employeeIdOrNameStr !== '' && yearStr === '' && monthStr === '' && dayStr === '') {
+
+        // Only employee ID or name is provided
+        const query = {
+            $or: [
+                { employeeID: employeeIdOrNameStr },
+                { name: employeeIdOrNameStr }
+            ]
+        };
+
+        // Sort by the most recent and limit to 10 records
+        try {
+            const records = await attendance_details.find(query).sort({ Year: -1, Month: -1, Day: -1 }).limit(10).lean();
+            console.log(records);
+            mainWindow.webContents.send("attendance_search:result", records);
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    // If the year, month, and day are provided, get the day's record of attendance for the company
+
+    if (employeeIdOrNameStr === '' && yearStr !== '' && monthStr !== '' && dayStr !== '') {
+
+        // Year, month, and date are provided (company-wide search for a specific day)
+
+        const query = {
+            Year: yearStr,
+            Month: monthStr,
+            Day: dayStr
+        };
+
+        try {
+            const records = await attendance_details.find(query).lean();
+            console.log(records);
+            mainWindow.webContents.send("attendance_search:result", records);
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    // If the employee ID or name and year and month are provided, get the monthly attendance record of the employee
+
+    if (employeeIdOrNameStr !== '' && yearStr !== '' && monthStr !== '' && dayStr === '') {
+
+        // Employee ID or name, and year and month are provided (monthly attendance for the employee)
+
+        const query = {
+            $or: [
+                { employeeID: employeeIdOrNameStr },
+                { name: employeeIdOrNameStr }
+            ],
+            Year: yearStr,
+            Month: monthStr
+        };
+
+        try {
+            const records = await attendance_details.find(query).lean();
+            console.log(records);
+            mainWindow.webContents.send("attendance_search:result", records);
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    // If everything is present, get the single attendance record of the specific employee on the specific date
+
+    if (employeeIdOrNameStr !== '' && yearStr !== '' && monthStr !== '' && dayStr !== '') {
+
+        // All parameters are provided (specific attendance record for the employee on the specific date)
+
+        const query = {
+            $or: [
+                { employeeID: employeeIdOrNameStr },
+                { name: employeeIdOrNameStr }
+            ],
+            Year: yearStr,
+            Month: monthStr,
+            Day: dayStr
+        };
+
+        try {
+            const records = await attendance_details.find(query).lean();
+
+            console.log(records);
+
+            mainWindow.webContents.send("attendance_search:result", records);
+            
+        } catch (err) {
+            console.error(err);
+        }
+    }
+});
+
+
+
+
+
+
+
 
 
 
