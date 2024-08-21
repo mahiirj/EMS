@@ -7,9 +7,16 @@ const PunchOutModal = ({ employeeNumber, onClose, onSubmit, punchData }) => {
   const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
+    
     window.electron.ipcRenderer.on("item_list:send", function (e, item_array) {
       setItemData(item_array);
     });
+
+    window.electron.ipcRenderer.on("item_list:send",function(e,item_array){
+
+      setItemData(item_array);
+
+    })
   }, []);
 
   const handleRowClick = (item) => {
@@ -102,7 +109,8 @@ const PunchOutModal = ({ employeeNumber, onClose, onSubmit, punchData }) => {
   };
 
   const handleSearch = () => {
-    window.electron.ipcRenderer.send("sending_search:find", searchQuery);
+
+    window.electron.ipcRenderer.send("search_item:send", searchQuery);
   };
 
   const handleSearchInputChange = (e) => {
