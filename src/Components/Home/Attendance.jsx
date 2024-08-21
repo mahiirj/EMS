@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import "./Attendance.css";
 import PunchDataTable from "./PunchDataTable";
 import PunchOutModal from "./PunchOutModal";
@@ -13,29 +13,23 @@ const Attendance = () => {
   const [currentEmployeeName, setCurrentEmployeeName] = useState(null);
 
   useEffect(() => {
-
-    window.electron.ipcRenderer.on("obtained_name:send", function (e,employee_name) {
-
-      setCurrentEmployeeName(employee_name);
-
-    });
-
+    window.electron.ipcRenderer.on(
+      "obtained_name:send",
+      function (e, employee_name) {
+        setCurrentEmployeeName(employee_name);
+      }
+    );
   }, []);
 
   const handleActionClick = (type) => {
-
     setActionType(type);
 
-    if(actionType== "punchIn"){
-
-      window.electron.ipcRenderer.send("obtain_name:send",employeeNumber);
-
+    if (actionType == "punchIn") {
+      window.electron.ipcRenderer.send("obtain_name:send", employeeNumber);
     }
-
   };
 
   const handleSubmit = () => {
-
     if (employeeNumber === "") {
       alert("Please enter the employee number.");
       return;
@@ -44,8 +38,6 @@ const Attendance = () => {
     const currentTime = new Date().toLocaleString();
 
     if (actionType === "punchIn") {
-
-      
       const newPunchData = [
         ...punchData,
         {
@@ -58,21 +50,16 @@ const Attendance = () => {
 
       setPunchData(newPunchData);
 
-      window.electron.ipcRenderer.send("punch_data:send",newPunchData);
+      window.electron.ipcRenderer.send("punch_data:send", newPunchData);
 
-
-    
       setPunchData(newPunchData);
     } else if (actionType === "punchOut") {
-      
       // Set the current employee number and show the modal
       setCurrentEmployeeNumber(employeeNumber);
       setShowPunchOutModal(true);
 
       // Send request to fetch item list before showing the modal
       window.electron.ipcRenderer.send("refresh_items:send");
-
-     
     }
 
     setEmployeeNumber("");
@@ -80,7 +67,6 @@ const Attendance = () => {
   };
 
   const handlePunchOutSubmit = (details) => {
-
     const { employeeNumber, selectedItem, partsData } = details;
     const currentTime = new Date().toLocaleString();
 
@@ -149,6 +135,8 @@ const Attendance = () => {
         </div>
       </div>
 
+      <button></button>
+
       {/* Punch Data Table */}
       {showTable && (
         <div className="tableContainer">
@@ -163,8 +151,6 @@ const Attendance = () => {
           onClose={() => setShowPunchOutModal(false)}
           onSubmit={handlePunchOutSubmit}
           punchData={punchData}
-
-          
         />
       )}
     </div>
