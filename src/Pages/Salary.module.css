@@ -1,39 +1,182 @@
 * {
   margin: 0;
+  box-sizing: border-box;
 }
 
 .page {
   display: flex;
+  min-height: 100vh;
+}
+
+.section1 {
+  flex: 0 0 250px; /* Adjust width as needed */
+  background-color: #f4f4f4;
 }
 
 .section2 {
+  flex: 1;
+  padding: 20px;
   background-color: rgba(122, 236, 156, 0.336);
-  width: 150dvh;
-  height: 80px;
-  margin: 70px 100px;
   border-radius: 30px;
-}
-
-.searchbar {
-  width: 85%;
-  height: 30px;
   margin: 20px;
-  border-radius: 30px;
-  border: navy;
-  font-size: 20px;
 }
 
-.search button {
-  width: 100px;
-  height: 50px;
-  border-radius: 20px;
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.table th,
+.table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #dddddd;
+}
+
+.table th {
+  background-color: #f2f2f2;
+}
+
+.searchContainer {
+  margin-bottom: 20px;
+  padding: 10px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.searchBox {
+  display: flex;
+  align-items: center;
+  margin: 10px;
+  flex: 1;
+}
+
+.searchBox label {
+  margin-right: 10px;
+  font-weight: bold;
+}
+
+.searchBox input {
+  padding: 8px;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  margin-right: 10px;
+  flex: 1;
+}
+
+.searchButton {
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: #ffffff;
   border: none;
-  margin-left: 30px;
-  background-color: greenyellow;
-  font-size: 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
-.search button:hover {
-  border: 2px solid;
-  scale: 1.1;
+.searchButton:hover {
+  background-color: #0056b3;
+}
+
+.employeeId,
+.employeeName,
+.monthlySalary,
+.advancements {
+  /* Additional styling for specific table cells */
+}
+
+/* Media Queries */
+@media (max-width: 1200px) {
+  .section1 {
+    flex: 0 0 200px; /* Slightly reduce sidebar width */
+  }
+
+  .section2 {
+    margin: 20px 10px; /* Reduce margins for smaller screens */
+  }
+
+  .searchContainer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .searchBox {
+    margin: 5px 0;
+    width: 100%;
+  }
+
+  .searchButton {
+    width: 100%;
+    margin-top: 10px;
+  }
+}
+
+@media (max-width: 768px) {
+  .page {
+    flex-direction: column; /* Stack sidebar and content vertically */
+  }
+
+  .section1 {
+    flex: 0 0 100%; /* Full width sidebar */
+    margin-bottom: 20px;
+  }
+
+  .section2 {
+    margin: 10px;
+    padding: 10px;
+  }
+
+  .table th,
+  .table td {
+    padding: 8px; /* Reduce padding in table cells */
+  }
+
+  .searchBox {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .searchBox label {
+    margin-bottom: 5px;
+  }
+
+  .searchBox input {
+    margin-bottom: 10px;
+  }
+
+  .searchButton {
+    width: 100%;
+    margin-top: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .searchBox input {
+    padding: 6px;
+    font-size: 14px;
+  }
+
+  .searchButton {
+    padding: 6px 12px;
+    font-size: 14px;
+  }
+
+  .table {
+    font-size: 14px; /* Adjust font size for small screens */
+  }
+
+  .searchContainer {
+    padding: 5px;
+  }
 }

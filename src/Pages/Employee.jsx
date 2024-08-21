@@ -13,10 +13,7 @@ const Employee = () => {
   const [employee_Profile, setEmployeeProfile] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
-
   useEffect(() => {
-
-
     window.electron.ipcRenderer.on(
       "employee_list:send",
       function (e, employee_array) {
@@ -32,8 +29,6 @@ const Employee = () => {
         // setSelectedEmployee(employeeProfile.id);
       }
     );
-
-
 
     // return()=>{
 
@@ -56,7 +51,6 @@ const Employee = () => {
   };
 
   const handleRowClick = (employeeData) => {
-    
     let employee_id = employeeData.id;
     setSelectedEmployee(employee_id);
     setIsLoading(true); // Start loading when a row is clicked
@@ -66,7 +60,7 @@ const Employee = () => {
   const handleCloseProfile = () => {
     setSelectedEmployee(null);
     setEmployeeProfile(null);
-    setIsLoading(false); 
+    setIsLoading(false);
   };
 
   const handleRemoveEmployee = (id) => {
@@ -144,9 +138,6 @@ const Employee = () => {
           onRemove={handleRemoveEmployee}
         />
       )}
-
-      
-
     </div>
   );
 };
