@@ -151,7 +151,6 @@ const Attendance = () => {
       {showAttendanceInfoModal && (
         <AttendanceInfoModal
           onClose={() => setShowAttendanceInfoModal(false)}
-          punchData={punchData}
         />
       )}
     </div>

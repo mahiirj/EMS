@@ -1,34 +1,30 @@
-// AttendanceInfoModal.js
-
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import "./AttendanceInfoModal.css";
-
-//attendance fake
 
 const AttendanceInfoModal = ({ onClose }) => {
   const [employeeIdOrName, setEmployeeIdOrName] = useState("");
   const [day, setDay] = useState("");
   const [month, setMonth] = useState("");
   const [year, setYear] = useState("");
+  const [records, setRecords] = useState([]); // State to hold the attendance records
 
   useEffect(() => {
-
     window.electron.ipcRenderer.on(
       "attendance_search:result",
-
       function (e, records) {
-
-           
+        setRecords(records); // Update state with the received records
       }
     );
-
   }, []);
 
   const handleSubmit = () => {
-
-    // Handle form submission logic
-    
-    window.electron.ipcRenderer.send("attendance_search:send",employeeIdOrName,year,month,day);
+    window.electron.ipcRenderer.send(
+      "attendance_search:send",
+      employeeIdOrName,
+      year,
+      month,
+      day
+    );
   };
 
   return (
@@ -102,7 +98,21 @@ const AttendanceInfoModal = ({ onClose }) => {
                 <th>Total Earned</th>
               </tr>
             </thead>
-            <tbody>{/* Render filtered data here */}</tbody>
+            <tbody>
+              {records.map((entry) => (
+                <tr>
+                  <td>{entry.employeeID}</td>
+                  <td>{entry.name}</td>
+                  <td>
+                    {entry.Day},{entry.Month},{entry.Year}
+                  </td>
+                  <td>{entry.Punch_in_time}</td>
+                  <td>{entry.Punch_out_time}</td>
+                  <td>{entry.products_done.map((e) => e.name)}</td>
+                  <td>{entry.daily_payment}</td>
+                </tr>
+              ))}
+            </tbody>
           </table>
         </div>
       </div>

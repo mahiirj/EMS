@@ -15,11 +15,10 @@
 
 .modalContent {
   background-color: white;
-  padding: 20px;
+  padding: 100px;
   border-radius: 8px;
-  width: 80%; /* Increase modal size */
-  max-width: 1000px; /* Adjust to desired size */
-  max-height: 90%;
+  max-width: 900px;
+
   overflow-y: scroll;
 }
 
@@ -56,6 +55,7 @@
 table {
   width: 100%;
   border-collapse: collapse;
+  padding-bottom: 200px;
 }
 
 th,
