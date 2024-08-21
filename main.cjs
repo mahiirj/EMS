@@ -994,22 +994,53 @@ ipcMain.on("obtain_name:send",function(e,punched_id){
 })
 
 
-//recieving the attendance data from the attendance window to save it to the database
+let punch_data;
 
 
-ipcMain.on("punchout_data:save",async function(e,selectedItems){
+//recieving the punchdata
 
+ipcMain.on("punch_data:send",function(e,punchData){
 
-    console.log("selected items array");
+    const currentTime = new Date().toLocaleTimeString();
+
+    punchData.punchOutTime = currentTime;
+
+    console.log(punchData);
+
+    punch_data = punchData;
+
     
-    console.log(selectedItems);
+   
+})
 
-    console.log(selectedItems.subitems);
 
 
-    //creating a new object to only get the wanted data to append to the scheme
+//saving attendance details
 
-    
+ipcMain.on("punchout_data:save",async function(e,submissionData){
+
+    console.log("I recieved the data");
+
+    console.log(submissionData);
+
+    console.log(punch_data);
+
+    let total = 0;
+   
+
+    //extract the year,month and data seperately from the punch in date
+
+    const dateString = punch_data[0].punchInTime;
+
+    // Regex to match the date pattern (MM/DD/YYYY)
+
+    const regex = /(\d{1,2})\/(\d{1,2})\/(\d{4})/;
+
+    const [_, month, day, year] = dateString.match(regex);
+
+    console.log(`Year: ${year}`);   // Output: "Year: 2024"
+    console.log(`Month: ${month}`); // Output: "Month: 8"
+    console.log(`Day: ${day}`);     // Output: "Day: 21"
 
 
     //function for appending data to the database
@@ -1019,31 +1050,42 @@ ipcMain.on("punchout_data:save",async function(e,selectedItems){
 
         try {
 
+            // Flatten the selectedItems and extract subitems to save in products_done
+
+            const products_done = submissionData.selectedItems.flatMap(item => {
+                return item.subitems.map(subitem => ({
+                    name: subitem.name,
+                    quantity: subitem.quantity,
+                    price: subitem.price,
+                }));
+            });
+
             const attendance = new attendance_details({
 
-                    // daily_payment: add_total,
+                    daily_payment: submissionData.grandTotal,
 
-                    // name: selectedItems.name,
+                    name: punch_data[0].name,
 
-                    // Punch_in_time: selected_items.
+                    Punch_in_time: punch_data[0].punchInTime,
 
-                    // Punch_out_time: punchout_time,
+                    Punch_out_time: punch_data.punchOutTime,
 
-                    // Year: year,
+                    Year: year,
 
-                    // Month: month,
+                    Month: month,
 
-                    // Day: day,
+                    Day: day,
 
-                    // employeeID: punched_id_text,
+                    employeeID: punch_data[0].employeeNumber,
 
-                    // products_done: object_hold
+                    products_done: products_done,
 
                 });
             
 
             await attendance.save();
             
+            //send the just now saved item details to the addwindow3
 
             console.log(attendance);
 
@@ -1058,96 +1100,13 @@ ipcMain.on("punchout_data:save",async function(e,selectedItems){
     await add_attendance();
 
 
-    // //query to find if the salary details are available already in the database based on year month and the employee id or name
-
-
-    // const query = {
-    //     Year: year,
-    //     Month: month,
-    //     $or: [
-    //         { employeeID: punched_id_text },
-    //         { employee_name: add_name}
-    //     ]
-    // };
-
-
-    // //finding the salary record based on the recieved details
-
-    
-    // const salary_record = await salary_details.findOne(query);
-
-    // if(salary_record==null){
-
-    //     await add_salary();
-    // }
-    // else{
-
-    //     await update_salary(salary_record);
-
-    // }
-
-
-    // //adding the salary details if there are none matching
-
-
-    // async function add_salary() {
-
-
-    //     try {
-
-    //         const salary = new salary_details({
-
-    //             employeeID: punched_id_text,
-
-    //             employee_name: add_name,
-          
-    //             Year: year,
-          
-    //             Month: month,
-          
-    //             Salary: add_total,
-          
-    //             Status: "Due",
-
-    //         });
-            
-
-    //         await salary.save();
-            
-    //         //send the just now saved item details to the addwindow3
-
-    //         console.log(salary);
-
-    //         console.log("salary record successfully added to the database");
-
-    //     } catch (e) {
-
-    //         console.log(e.message);
-    //     }
-    // }
-
-
-    // //updating the salary details if there are matching items with the month and the year
-
-    // async function update_salary(salary_record) {
-
-    //     try {
-
-    //         await salary_record.updateOne({ $inc: { Salary: add_total } });
-
-    //         console.log(salary_record);
-
-    //         console.log("Salary record successfully updated in the database");
-
-    //     } catch (e) {
-
-    //         console.log(e.message);
-    //     }
-    // }
-
-
 
 })
+
+
+
+
+
 
 
 

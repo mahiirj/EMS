@@ -46,8 +46,6 @@ const Attendance = () => {
     if (actionType === "punchIn") {
 
       
-
-    
       const newPunchData = [
         ...punchData,
         {
@@ -57,14 +55,24 @@ const Attendance = () => {
           punchOutTime: "Active",
         },
       ];
+
+      setPunchData(newPunchData);
+
+      window.electron.ipcRenderer.send("punch_data:send",newPunchData);
+
+
     
       setPunchData(newPunchData);
     } else if (actionType === "punchOut") {
-      // Send request to fetch item list before showing the modal
-      window.electron.ipcRenderer.send("refresh_items:send");
+      
       // Set the current employee number and show the modal
       setCurrentEmployeeNumber(employeeNumber);
       setShowPunchOutModal(true);
+
+      // Send request to fetch item list before showing the modal
+      window.electron.ipcRenderer.send("refresh_items:send");
+
+     
     }
 
     setEmployeeNumber("");
@@ -89,7 +97,9 @@ const Attendance = () => {
     setShowPunchOutModal(false);
 
     // Send request to refresh items
-    window.electron.ipcRenderer.send("refresh_items:send");
+    // window.electron.ipcRenderer.send("refresh_items:send");
+
+    // window.electron.ipcRenderers.send("punchout_recieve",punchData);
   };
 
   return (
@@ -152,6 +162,9 @@ const Attendance = () => {
           employeeNumber={currentEmployeeNumber}
           onClose={() => setShowPunchOutModal(false)}
           onSubmit={handlePunchOutSubmit}
+          punchData={punchData}
+
+          
         />
       )}
     </div>

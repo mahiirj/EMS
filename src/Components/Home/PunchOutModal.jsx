@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styles from "./PunchOutModal.module.css";
 
-const PunchOutModal = ({ employeeNumber, onClose, onSubmit }) => {
+const PunchOutModal = ({ employeeNumber, onClose, onSubmit,punchData }) => {
   const [selectedItems, setSelectedItems] = useState([]);
   const [itemArray, setItemData] = useState([]);
 
@@ -53,35 +53,46 @@ const PunchOutModal = ({ employeeNumber, onClose, onSubmit }) => {
   };
 
   const prepareSubmissionData = () => {
-    return selectedItems
-      .map((item) => {
-        const selectedSubitems = item.subitems.filter(
-          (subitem) => subitem.quantity > 0
-        );
+    const filteredItems = selectedItems.map((item) => {
+      const selectedSubitems = item.subitems.filter(
+        (subitem) => subitem.quantity > 0
+      );
 
-        if (selectedSubitems.length === 0) return null; // Skip items with no selected subitems
+      if (selectedSubitems.length === 0) return null;
 
-        const total = selectedSubitems.reduce(
-          (sum, subitem) => sum + subitem.quantity * subitem.price,
+      return {
+        id: item.id,
+        itemName: item.itemName,
+        subitems: selectedSubitems,
+      };
+    }).filter(Boolean); // Remove null entries from the array
+
+    const grandTotal = filteredItems.reduce((grandSum, item) => {
+      return (
+        grandSum +
+        item.subitems.reduce(
+          (itemSum, subitem) => itemSum + subitem.quantity * subitem.price,
           0
-        );
+        )
+      );
+    }, 0);
 
-        return {
-          id: item.id,
-          itemName: item.itemName,
-          subitems: selectedSubitems,
-          total,
-        };
-      })
-      .filter(Boolean); // Remove null entries from the array
+    return {
+      employeeNumber,
+      selectedItems: filteredItems,
+      grandTotal, // Include the grand total
+    };
   };
 
   const handleSubmit = () => {
-    const submissionData = prepareSubmissionData();
-    console.log("Data being sent:", { employeeNumber, submissionData });
-    onSubmit({ employeeNumber, selectedItems: submissionData });
 
-    window.electron.ipcRenderer.send("punchout_data:save", submissionData);
+    const submissionData = prepareSubmissionData();
+    
+    onSubmit(submissionData);
+
+    const punch_data = punchData;
+
+    window.electron.ipcRenderer.send("punchout_data:save", submissionData,punch_data);
 
     onClose();
   };
