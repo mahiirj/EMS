@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./Attendance.css";
 import PunchDataTable from "./PunchDataTable";
 import PunchOutModal from "./PunchOutModal";
+import AttendanceInfoModal from "./AttendanceInfoModal"; // Import the new modal
 
 const Attendance = () => {
   const [employeeNumber, setEmployeeNumber] = useState("");
@@ -9,6 +10,7 @@ const Attendance = () => {
   const [punchData, setPunchData] = useState([]);
   const [showTable, setShowTable] = useState(false);
   const [showPunchOutModal, setShowPunchOutModal] = useState(false);
+  const [showAttendanceInfoModal, setShowAttendanceInfoModal] = useState(false); // State for showing the attendance info modal
   const [currentEmployeeNumber, setCurrentEmployeeNumber] = useState("");
   const [currentEmployeeName, setCurrentEmployeeName] = useState(null);
 
@@ -24,7 +26,7 @@ const Attendance = () => {
   const handleActionClick = (type) => {
     setActionType(type);
 
-    if (actionType == "punchIn") {
+    if (type === "punchIn") {
       window.electron.ipcRenderer.send("obtain_name:send", employeeNumber);
     }
   };
@@ -49,16 +51,10 @@ const Attendance = () => {
       ];
 
       setPunchData(newPunchData);
-
       window.electron.ipcRenderer.send("punch_data:send", newPunchData);
-
-      setPunchData(newPunchData);
     } else if (actionType === "punchOut") {
-      // Set the current employee number and show the modal
       setCurrentEmployeeNumber(employeeNumber);
       setShowPunchOutModal(true);
-
-      // Send request to fetch item list before showing the modal
       window.electron.ipcRenderer.send("refresh_items:send");
     }
 
@@ -79,20 +75,15 @@ const Attendance = () => {
       }
       return entry;
     });
+
     setPunchData(updatedPunchData);
     setShowPunchOutModal(false);
-
-    // Send request to refresh items
-    // window.electron.ipcRenderer.send("refresh_items:send");
-
-    // window.electron.ipcRenderers.send("punchout_recieve",punchData);
   };
 
   return (
     <div className="mainContainer">
       <div className="attendanceContainer">
         <h1>Employee Attendance</h1>
-        <br />
         <div className="formGroup">
           <label htmlFor="employeeNumber">Employee Number</label> <br />
           <input
@@ -135,21 +126,31 @@ const Attendance = () => {
         </div>
       </div>
 
-      <button></button>
+      <button
+        className="button"
+        onClick={() => setShowAttendanceInfoModal(true)}
+      >
+        Attendance Information
+      </button>
 
-      {/* Punch Data Table */}
       {showTable && (
         <div className="tableContainer">
           <PunchDataTable punchData={punchData} />
         </div>
       )}
 
-      {/* Punch Out Modal */}
       {showPunchOutModal && (
         <PunchOutModal
           employeeNumber={currentEmployeeNumber}
           onClose={() => setShowPunchOutModal(false)}
           onSubmit={handlePunchOutSubmit}
+          punchData={punchData}
+        />
+      )}
+
+      {showAttendanceInfoModal && (
+        <AttendanceInfoModal
+          onClose={() => setShowAttendanceInfoModal(false)}
           punchData={punchData}
         />
       )}

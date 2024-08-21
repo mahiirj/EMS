@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import styles from "./PunchOutModal.module.css";
 
-const PunchOutModal = ({ employeeNumber, onClose, onSubmit,punchData }) => {
+const PunchOutModal = ({ employeeNumber, onClose, onSubmit, punchData }) => {
   const [selectedItems, setSelectedItems] = useState([]);
   const [itemArray, setItemData] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     window.electron.ipcRenderer.on("item_list:send", function (e, item_array) {
@@ -53,19 +54,21 @@ const PunchOutModal = ({ employeeNumber, onClose, onSubmit,punchData }) => {
   };
 
   const prepareSubmissionData = () => {
-    const filteredItems = selectedItems.map((item) => {
-      const selectedSubitems = item.subitems.filter(
-        (subitem) => subitem.quantity > 0
-      );
+    const filteredItems = selectedItems
+      .map((item) => {
+        const selectedSubitems = item.subitems.filter(
+          (subitem) => subitem.quantity > 0
+        );
 
-      if (selectedSubitems.length === 0) return null;
+        if (selectedSubitems.length === 0) return null;
 
-      return {
-        id: item.id,
-        itemName: item.itemName,
-        subitems: selectedSubitems,
-      };
-    }).filter(Boolean); // Remove null entries from the array
+        return {
+          id: item.id,
+          itemName: item.itemName,
+          subitems: selectedSubitems,
+        };
+      })
+      .filter(Boolean); // Remove null entries from the array
 
     const grandTotal = filteredItems.reduce((grandSum, item) => {
       return (
@@ -85,22 +88,44 @@ const PunchOutModal = ({ employeeNumber, onClose, onSubmit,punchData }) => {
   };
 
   const handleSubmit = () => {
-
     const submissionData = prepareSubmissionData();
-    
+
     onSubmit(submissionData);
 
-    const punch_data = punchData;
-
-    window.electron.ipcRenderer.send("punchout_data:save", submissionData,punch_data);
+    window.electron.ipcRenderer.send(
+      "punchout_data:save",
+      submissionData,
+      punchData
+    );
 
     onClose();
+  };
+
+  const handleSearch = () => {
+    window.electron.ipcRenderer.send("sending_search:find", searchQuery);
+  };
+
+  const handleSearchInputChange = (e) => {
+    setSearchQuery(e.target.value);
   };
 
   return (
     <div className={styles.modal}>
       <div className={styles.modalContent}>
         <h2>Punch Out Details</h2>
+
+        <div className={styles.search}>
+          <input
+            type="text"
+            placeholder="   Search"
+            className={styles.searchbar}
+            id="searchbar"
+            value={searchQuery}
+            onChange={handleSearchInputChange}
+          />
+          <button onClick={handleSearch}>Search</button>
+        </div>
+
         <div className={styles.formGroup}>
           <h3>Clothing Items</h3>
           <table className={styles.clothingTable}>
@@ -113,7 +138,7 @@ const PunchOutModal = ({ employeeNumber, onClose, onSubmit,punchData }) => {
             <tbody>
               {itemArray.map((item) => (
                 <tr
-                  key={item._id}
+                  key={item.id} // Ensure consistent ID usage
                   onClick={() => handleRowClick(item)}
                   className={
                     selectedItems.some(
@@ -206,7 +231,7 @@ const PunchOutModal = ({ employeeNumber, onClose, onSubmit,punchData }) => {
                           onClick={() => handleRemoveItem(item.id)}
                           className={styles.removeButton}
                         >
-                          Remove
+                          X
                         </button>
                       </td>
                     </tr>

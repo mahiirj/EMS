@@ -1,0 +1,70 @@
+/* AttendanceInfoModal.css */
+
+.modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+.modalContent {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 80%; /* Increase modal size */
+  max-width: 1000px; /* Adjust to desired size */
+  max-height: 90%;
+  overflow-y: scroll;
+}
+
+.formGroup {
+  margin-bottom: 15px;
+}
+
+.employeeInput {
+  width: 100%;
+  font-size: 1.2rem; /* Increase input size */
+}
+
+.dateGroup {
+  display: flex;
+  justify-content: center;
+  gap: 80px;
+}
+
+.dateInputField {
+  width: 100%; /* Adjust width to fit side by side */
+}
+
+.formActions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.tableContainer {
+  margin-top: 20px;
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 10px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+th {
+  background-color: #f4f4f4;
+}

@@ -131,3 +131,27 @@
 .remove {
   width: 10%;
 }
+
+.searchbar {
+  width: 55%;
+  height: 30px;
+  margin: 20px;
+  border-radius: 30px;
+  border: solid 0.5px navy;
+  font-size: 20px;
+}
+
+.search button {
+  width: 100px;
+  height: 50px;
+  border-radius: 20px;
+  border: none;
+  margin-left: 30px;
+  background-color: greenyellow;
+  font-size: 20px;
+}
+
+.search button:hover {
+  border: 2px solid;
+  scale: 1.1;
+}
