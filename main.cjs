@@ -1466,6 +1466,8 @@ ipcMain.on("attendance_today:send", async function(e) {
 
         const records = await attendance_details.find(query).lean();
 
+        console.log("records print");
+
         console.log(records);
 
         // Send the result back to the renderer process
