@@ -74,14 +74,22 @@ const Salary = () => {
 
     setsalary_status(salary_status);
 
+    //making an object to hold the salary search data
+
+    const search_object = {
+
+      id_name: employeeIdOrName,
+      search_year: salary_year,
+      search_month: salary_month,
+      search_status: salary_status,
+
+    }
+
     //send the data to the backend
 
     window.electron.ipcRenderer.send(
       "salary_search:send",
-      employeeIdOrName,
-      salary_year,
-      salary_month,
-      salary_status
+       search_object
     );
   };
 

@@ -1216,15 +1216,15 @@ ipcMain.on("punchout_data:save",async function(e,submissionData){
 
 //recieving the attendance search requests
 
-ipcMain.on("attendance_search:send", async function(e, employeeIdOrName, year, month, day) {
+ipcMain.on("attendance_search:send", async function(e, search_object) {
 
-    console.log(employeeIdOrName);
+    const year = search_object.search_year;
 
-    console.log(year);
+    const employeeIdOrName = search_object.id_name;
 
-    console.log(month);
+    const month = search_object.search_month;
 
-    console.log(day);
+    const day = search_object.search_day;
 
     // Convert all inputs to strings
 
@@ -1486,15 +1486,15 @@ ipcMain.on("attendance_today:send", async function(e) {
 
 //salary search functionalities
 
-ipcMain.on("salary_search:send", async function(e, employeeIdOrName, salary_year, salary_month, salary_status) {
+ipcMain.on("salary_search:send", async function(e, search_object) {
 
-    console.log(employeeIdOrName);
+    const employeeIdOrName = search_object.employeeIdOrName;
 
-    console.log(salary_year);
+    const salary_year = search_object.search_year;
 
-    console.log(salary_month);
+    const salary_month = search_object.search_month;
 
-    console.log(salary_status);
+    const salary_status = search_object.search_status
 
     // Convert all inputs to strings
 
@@ -1615,6 +1615,8 @@ ipcMain.on('get_active_employee_count', async (event) => {
         throw error; 
     }
 });
+
+
 
 
 

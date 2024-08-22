@@ -33,12 +33,20 @@ const AttendanceInfoModal = ({ onClose }) => {
   }, []);
 
   const handleSubmit = () => {
+
+    const search_object = {
+
+      id_name: employeeIdOrName,
+      search_year: year,
+      search_month: month,
+      search_day: day
+
+    }
+
+
     window.electron.ipcRenderer.send(
       "attendance_search:send",
-      employeeIdOrName,
-      year,
-      month,
-      day
+       search_object
     );
   };
 
