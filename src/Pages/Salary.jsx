@@ -6,17 +6,14 @@ const Salary = () => {
   const [salaryArray, setSalaryArray] = useState([]);
   const [obtainedMonth, setObtainedMonth] = useState("");
   const [currentYear, setCurrentYear] = useState("");
-  const [employeeIdOrName,setEmployeeIdOrName] = useState("");
-  const [salary_year,setsalary_year] = useState("");
-  const [salary_month,setsalary_month] = useState("");
-  const [salary_status,setsalary_status] = useState("");
-  const [salarysearch_results,setsalarysearch_results] = useState([]);
+  const [employeeIdOrName, setEmployeeIdOrName] = useState("");
+  const [salary_year, setsalary_year] = useState("");
+  const [salary_month, setsalary_month] = useState("");
+  const [salary_status, setsalary_status] = useState("");
+  const [salarysearch_results, setsalarysearch_results] = useState([]);
 
   useEffect(() => {
-
     const { ipcRenderer } = window.electron;
-
-   
 
     ipcRenderer.on(
       "current_salary:result",
@@ -27,15 +24,12 @@ const Salary = () => {
       }
     );
 
-
-    window.electron.ipcRenderer.on("salary_search:result",function(e,records){
-
-      setsalarysearch_results(records);
-
-
-    })
-
-
+    window.electron.ipcRenderer.on(
+      "salary_search:result",
+      function (e, records) {
+        setsalarysearch_results(records);
+      }
+    );
   }, []);
 
   const handleEditAdvance = (index) => {
@@ -59,9 +53,7 @@ const Salary = () => {
     ipcRenderer.send("update_advance:send", parseFloat(value || 0));
   };
 
-
-  const handleSearch = (e) =>{
-
+  const handleSearch = (e) => {
     // Get values from input fields
 
     const employeeIdOrName = document.getElementById("search_id_month").value;
@@ -84,11 +76,14 @@ const Salary = () => {
 
     //send the data to the backend
 
-    window.electron.ipcRenderer.send("salary_search:send",employeeIdOrName,salary_year,salary_month,salary_status);
-
-    
-
-  }
+    window.electron.ipcRenderer.send(
+      "salary_search:send",
+      employeeIdOrName,
+      salary_year,
+      salary_month,
+      salary_status
+    );
+  };
 
   return (
     <div className={styles.page}>
@@ -107,7 +102,6 @@ const Salary = () => {
               <th>Month</th>
               <th>Salary</th>
               <th>Payment Status</th>
-              <th>Advancements</th>
             </tr>
           </thead>
           <tbody>
@@ -123,31 +117,6 @@ const Salary = () => {
                   {record.monthly_salary}
                 </td>
                 <td>Payment Due</td>
-                <td className={styles.advancements}>
-                  {record.isEditing ? (
-                    <>
-                      <input
-                        type="text"
-                        defaultValue={record.advancements || ""}
-                        onBlur={(e) => handleSaveAdvance(index, e.target.value)}
-                      />
-                      <button
-                        onClick={() =>
-                          handleSaveAdvance(index, record.advancements)
-                        }
-                      >
-                        Save
-                      </button>
-                    </>
-                  ) : (
-                    <>
-                      {record.advancements || "0.00"}
-                      <button onClick={() => handleEditAdvance(index)}>
-                        Edit
-                      </button>
-                    </>
-                  )}
-                </td>
               </tr>
             ))}
           </tbody>
@@ -171,10 +140,45 @@ const Salary = () => {
             <input type="text" id="search_status" placeholder="Enter Status" />
           </div>
 
-          <button onClick={handleSearch} type="button" className={styles.searchButton}>
+          <button
+            onClick={handleSearch}
+            type="button"
+            className={styles.searchButton}
+          >
             Search...
           </button>
         </div>
+
+        <table id="salary_table" className={styles.table}>
+          <thead>
+            <tr>
+              <th>Employee ID</th>
+              <th>Employee Name</th>
+              <th>Month</th>
+              <th>Salary</th>
+              <th>Payment Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {salarysearch_results.map((record, index) => (
+              <tr key={record.employee}>
+                <td className={styles.employee_id}>{record.employeeID}</td>
+                <td className={styles.employeeName}>{record.employee_name}</td>
+                <td>{obtainedMonth}</td>
+                <td
+                  className={styles.monthlySalary}
+                  data-original-salary={record.Salary}
+                >
+                  {record.Salary}
+                </td>
+                <td>
+                  {" "}
+                  <button>Payment Due</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );
