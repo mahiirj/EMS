@@ -1559,13 +1559,20 @@ ipcMain.on("salary_search:send", async function(e, employeeIdOrName, salary_year
 
         try {
             const records = await salary_details.find(query).lean();
+
             console.log(records);
+
             mainWindow.webContents.send("salary_search:result", records);
         } catch (err) {
             console.error(err);
         }
     }
 });
+
+
+
+
+
 
 
 
