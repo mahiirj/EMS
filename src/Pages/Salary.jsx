@@ -6,9 +6,17 @@ const Salary = () => {
   const [salaryArray, setSalaryArray] = useState([]);
   const [obtainedMonth, setObtainedMonth] = useState("");
   const [currentYear, setCurrentYear] = useState("");
+  const [employeeIdOrName,setEmployeeIdOrName] = useState("");
+  const [salary_year,setsalary_year] = useState("");
+  const [salary_month,setsalary_month] = useState("");
+  const [salary_status,setsalary_status] = useState("");
+  const [salarysearch_results,setsalarysearch_results] = useState([]);
 
   useEffect(() => {
+
     const { ipcRenderer } = window.electron;
+
+   
 
     ipcRenderer.on(
       "current_salary:result",
@@ -18,6 +26,16 @@ const Salary = () => {
         setCurrentYear(current_year);
       }
     );
+
+
+    window.electron.ipcRenderer.on("salary_search:result",function(e,records){
+
+      setsalarysearch_results(records);
+
+
+    })
+
+
   }, []);
 
   const handleEditAdvance = (index) => {
@@ -40,6 +58,37 @@ const Salary = () => {
     const { ipcRenderer } = window.electron;
     ipcRenderer.send("update_advance:send", parseFloat(value || 0));
   };
+
+
+  const handleSearch = (e) =>{
+
+    // Get values from input fields
+
+    const employeeIdOrName = document.getElementById("search_id_month").value;
+
+    const salary_year = document.getElementById("search_year").value;
+
+    const salary_month = document.getElementById("search_month").value;
+
+    const salary_status = document.getElementById("search_status").value;
+
+    // Update state variables
+
+    setEmployeeIdOrName(employeeIdOrName);
+
+    setsalary_year(salary_year);
+
+    setsalary_month(salary_month);
+
+    setsalary_status(salary_status);
+
+    //send the data to the backend
+
+    window.electron.ipcRenderer.send("salary_search:send",employeeIdOrName,salary_year,salary_month,salary_status);
+
+    
+
+  }
 
   return (
     <div className={styles.page}>
@@ -122,7 +171,7 @@ const Salary = () => {
             <input type="text" id="search_status" placeholder="Enter Status" />
           </div>
 
-          <button type="button" className={styles.searchButton}>
+          <button onClick={handleSearch} type="button" className={styles.searchButton}>
             Search...
           </button>
         </div>

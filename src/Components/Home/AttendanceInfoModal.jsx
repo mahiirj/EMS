@@ -7,14 +7,29 @@ const AttendanceInfoModal = ({ onClose }) => {
   const [month, setMonth] = useState("");
   const [year, setYear] = useState("");
   const [records, setRecords] = useState([]); // State to hold the attendance records
+  const [attendance_today,setattendance_today] = useState([]);
 
   useEffect(() => {
+
+    // Trigger the attendance today ipc request when the component mounts
+    
+    window.electron.ipcRenderer.send("attendance_today:send");
+
+
     window.electron.ipcRenderer.on(
       "attendance_search:result",
       function (e, records) {
         setRecords(records); // Update state with the received records
       }
     );
+
+    window.electron.ipcRenderer.on("attendance_today:result",function(e,records){
+      
+      setattendance_today(records);
+
+    })
+
+    
   }, []);
 
   const handleSubmit = () => {
@@ -108,7 +123,7 @@ const AttendanceInfoModal = ({ onClose }) => {
                   </td>
                   <td>{entry.Punch_in_time}</td>
                   <td>{entry.Punch_out_time}</td>
-                  <td>{entry.products_done.map((e) => e.name)}</td>
+                  <td></td>
                   <td>{entry.daily_payment}</td>
                 </tr>
               ))}

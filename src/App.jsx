@@ -5,6 +5,7 @@ import { HashRouter as Router, Routes, Route } from "react-router-dom";
 import Salary from "./Pages/Salary";
 import Items from "./Pages/Items";
 
+
 const App = () => {
   return (
     <Router>

@@ -16,6 +16,12 @@ const Sidebar = () => {
 
   };
 
+  const load_salary = (e) =>{
+
+    window.electron.ipcRenderer.send("salary:current_month");
+
+  }
+
   return (
     <div className="sidebar">
       <div className="logo">
@@ -33,7 +39,7 @@ const Sidebar = () => {
           <li onClick={load_employees}>
             <Link to="/Employee">Employees </Link>
           </li>
-          <li>
+          <li onClick={load_salary}>
             <Link to="/Salary">Salary</Link>
           </li>
           <li onClick={load_items}>
