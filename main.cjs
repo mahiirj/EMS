@@ -587,11 +587,11 @@ ipcMain.on('send_edited_info:send',function(event,editedEmployee){
                     employee.registeredDay = registeredDay;
                     employee.ID_number = editedEmployee.idNumber;
 
-                    if(employee.image != updated_imageData){
+                    if(updated_imageData != undefined){
                         employee.image = updated_imageData;
                     }
 
-                    if(employee.NIC_pic != updated_NIC_imageData){
+                    if(updated_NIC_imageData != undefined){
                        employee.NIC_pic = updated_NIC_imageData;
                     }
                     
@@ -1218,6 +1218,14 @@ ipcMain.on("punchout_data:save",async function(e,submissionData){
 
 ipcMain.on("attendance_search:send", async function(e, employeeIdOrName, year, month, day) {
 
+    console.log(employeeIdOrName);
+
+    console.log(year);
+
+    console.log(month);
+
+    console.log(day);
+
     // Convert all inputs to strings
 
     const employeeIdOrNameStr = employeeIdOrName ? String(employeeIdOrName).trim() : '';
@@ -1478,6 +1486,14 @@ ipcMain.on("attendance_today:send", async function(e) {
 
 ipcMain.on("salary_search:send", async function(e, employeeIdOrName, salary_year, salary_month, salary_status) {
 
+    console.log(employeeIdOrName);
+
+    console.log(salary_year);
+
+    console.log(salary_month);
+
+    console.log(salary_status);
+
     // Convert all inputs to strings
 
     const employeeIdOrNameStr = employeeIdOrName ? String(employeeIdOrName).trim() : '';
@@ -1578,6 +1594,30 @@ ipcMain.on("salary_search:send", async function(e, employeeIdOrName, salary_year
         }
     }
 });
+
+
+
+
+//counting active employees and sending it to the database
+
+ipcMain.on('get_active_employee_count', async (event) => {
+
+    try {
+        const activeCount = await employee_details.countDocuments({ status: 'active' }).exec();
+
+        mainWindow.webContents.send("send_employee_count",activeCount);
+
+
+    } catch (error) {
+        console.error('Error fetching active employee count:', error);
+        throw error; 
+    }
+});
+
+
+
+
+
 
 
 

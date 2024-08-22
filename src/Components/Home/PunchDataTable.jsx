@@ -1,7 +1,25 @@
 import React from "react";
+import { useEffect, useState } from "react";
 import "./PunchDataTable.css";
 
 const PunchDataTable = ({ punchData }) => {
+
+  useEffect(() => {
+
+  
+    //send IPC request to get the total employee count
+    window.electron.ipcRenderer.send("attendance_today:send");
+
+    //recieving the employee count 
+    window.electron.ipcRenderer.on("attendance_today:result",function(e,records){
+
+
+    })
+
+
+  }, []);
+
+
   return (
     <div className="tableContainer">
       <table className="table">
