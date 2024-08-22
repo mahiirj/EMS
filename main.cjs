@@ -586,10 +586,20 @@ ipcMain.on('send_edited_info:send',function(event,editedEmployee){
                     employee.registeredMonth = registeredMonth;
                     employee.registeredDay = registeredDay;
                     employee.ID_number = editedEmployee.idNumber;
-                    employee.image = updated_imageData;
-                    employee.NIC_pic = updated_NIC_imageData;
+
+                    if(employee.image != updated_imageData){
+                        employee.image = updated_imageData;
+                    }
+
+                    if(employee.NIC_pic != updated_NIC_imageData){
+                       employee.NIC_pic = updated_NIC_imageData;
+                    }
+                    
                     employee.contact.mobile_number = editedEmployee.mobile_number;
                     employee.contact.telephone_number = editedEmployee.telephone_number;
+                    employee.status = editedEmployee.status;
+                    employee.name = editedEmployee.name;
+
 
 
                     console.log("updated employee",employee);
