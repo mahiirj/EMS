@@ -1776,9 +1776,3 @@ ipcMain.on('get_active_employee_count', async (event) => {
 
 
 
-
-
-
-
-
-
