@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./Attendance.css";
 import PunchDataTable from "./PunchDataTable";
 import PunchOutModal from "./PunchOutModal";
-import AttendanceInfoModal from "./AttendanceInfoModal"; // Import the new modal
+import AttendanceInfoModal from "./AttendanceInfoModal";
 
 const Attendance = () => {
   const [employeeNumber, setEmployeeNumber] = useState("");
@@ -10,7 +10,7 @@ const Attendance = () => {
   const [punchData, setPunchData] = useState([]);
   const [showTable, setShowTable] = useState(true);
   const [showPunchOutModal, setShowPunchOutModal] = useState(false);
-  const [showAttendanceInfoModal, setShowAttendanceInfoModal] = useState(false); // State for showing the attendance info modal
+  const [showAttendanceInfoModal, setShowAttendanceInfoModal] = useState(false);
   const [currentEmployeeNumber, setCurrentEmployeeNumber] = useState("");
   const [currentEmployeeName, setCurrentEmployeeName] = useState(null);
 
