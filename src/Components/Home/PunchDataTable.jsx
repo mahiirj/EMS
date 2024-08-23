@@ -1,22 +1,13 @@
-import React from "react";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./PunchDataTable.css";
 
 const PunchDataTable = ({ punchData }) => {
   const [recorddata, setRecord] = useState([]);
 
   useEffect(() => {
-    //send IPC request to get the total employee count
-    window.electron.ipcRenderer.send("attendance_today:send");
-
-    //recieving the employee count
-    window.electron.ipcRenderer.on(
-      "attendance_today:result",
-      function (e, records) {
-        setRecord(records);
-      }
-    );
-  }, []);
+    // Initialize with existing punchData
+    setRecord(punchData);
+  }, [punchData]);
 
   return (
     <div className="tableContainer">

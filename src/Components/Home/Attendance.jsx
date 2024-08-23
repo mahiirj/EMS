@@ -7,20 +7,24 @@ import AttendanceInfoModal from "./AttendanceInfoModal";
 const Attendance = () => {
   const [employeeNumber, setEmployeeNumber] = useState("");
   const [actionType, setActionType] = useState("punchIn");
-  const [punchData, setPunchData] = useState([]);
   const [showTable, setShowTable] = useState(true);
   const [showPunchOutModal, setShowPunchOutModal] = useState(false);
   const [showAttendanceInfoModal, setShowAttendanceInfoModal] = useState(false);
   const [currentEmployeeNumber, setCurrentEmployeeNumber] = useState("");
   const [currentEmployeeName, setCurrentEmployeeName] = useState(null);
+  const [recorddata, setRecorddata] = useState([]);
 
   useEffect(() => {
-    window.electron.ipcRenderer.on(
-      "obtained_name:send",
-      function (e, employee_name) {
-        setCurrentEmployeeName(employee_name);
-      }
-    );
+    window.electron.ipcRenderer.on("obtained_name:send", (e, employee_name) => {
+      setCurrentEmployeeName(employee_name);
+    });
+
+    window.electron.ipcRenderer.on("attendance_today:result", (e, records) => {
+      setRecorddata(records);
+    });
+
+    // Request the initial records
+    window.electron.ipcRenderer.send("attendance_today:send");
   }, []);
 
   const handleActionClick = (type) => {
@@ -40,18 +44,16 @@ const Attendance = () => {
     const currentTime = new Date().toLocaleString();
 
     if (actionType === "punchIn") {
-      const newPunchData = [
-        ...punchData,
-        {
-          employeeNumber,
-          name: currentEmployeeName,
-          punchInTime: currentTime,
-          punchOutTime: "Active",
-        },
-      ];
+      const newPunchData = {
+        employeeID: employeeNumber,
+        name: currentEmployeeName,
+        Punch_in_time: currentTime,
+        Punch_out_time: "Active",
+      };
 
-      setPunchData(newPunchData);
-      window.electron.ipcRenderer.send("punch_data:send", newPunchData);
+      const updatedRecords = [...recorddata, newPunchData];
+      setRecorddata(updatedRecords);
+      window.electron.ipcRenderer.send("punch_data:send", updatedRecords);
     } else if (actionType === "punchOut") {
       setCurrentEmployeeNumber(employeeNumber);
       setShowPunchOutModal(true);
@@ -66,17 +68,22 @@ const Attendance = () => {
     const { employeeNumber, selectedItem, partsData } = details;
     const currentTime = new Date().toLocaleString();
 
-    const updatedPunchData = punchData.map((entry) => {
+    const updatedPunchData = recorddata.map((entry) => {
       if (
-        entry.employeeNumber === employeeNumber &&
-        entry.punchOutTime === "Active"
+        entry.employeeID === employeeNumber &&
+        entry.Punch_out_time === "Active"
       ) {
-        return { ...entry, punchOutTime: currentTime, selectedItem, partsData };
+        return {
+          ...entry,
+          Punch_out_time: currentTime,
+          selectedItem,
+          partsData,
+        };
       }
       return entry;
     });
 
-    setPunchData(updatedPunchData);
+    setRecorddata(updatedPunchData);
     setShowPunchOutModal(false);
   };
 
@@ -135,7 +142,7 @@ const Attendance = () => {
 
       {showTable && (
         <div className="tableContainer">
-          <PunchDataTable punchData={punchData} />
+          <PunchDataTable punchData={recorddata} />
         </div>
       )}
 
@@ -144,7 +151,7 @@ const Attendance = () => {
           employeeNumber={currentEmployeeNumber}
           onClose={() => setShowPunchOutModal(false)}
           onSubmit={handlePunchOutSubmit}
-          punchData={punchData}
+          punchData={recorddata}
         />
       )}
 

@@ -18,7 +18,7 @@
   width: 600px;
   max-width: 90%;
   position: relative;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
 .closeButton {
@@ -33,12 +33,12 @@
   height: 30px;
   cursor: pointer;
   font-size: 20px;
-  z-index: 1010;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  z-index: 1010; /* Adjusted z-index to ensure it's above other elements */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); /* Added box-shadow for better visibility */
 }
 
 .closeButton:hover {
-  background: darkred;
+  background: darkred; /* Slightly darker red on hover */
 }
 
 .profileHeader {
@@ -83,7 +83,6 @@
   padding: 10px;
   border-radius: 5px;
   cursor: pointer;
-  transition: background 0.3s;
 }
 
 .profileActions button:hover {
