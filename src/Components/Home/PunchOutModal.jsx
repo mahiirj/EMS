@@ -114,7 +114,7 @@ const PunchOutModal = ({ employeeNumber, onClose, onSubmit, punchData }) => {
   };
 
   const handleRefresh = () => {
-    window.electron.ipcRenderer.send("attendance_today:send");
+    window.electron.ipcRenderer.send("refresh_items:send");
   };
 
   return (

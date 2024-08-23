@@ -4,7 +4,11 @@ import "./PunchDataTable.css";
 const PunchDataTable = ({ punchData }) => {
   const [recorddata, setRecord] = useState([]);
 
+  
+
   useEffect(() => {
+
+  
     // Initialize with existing punchData
     setRecord(punchData);
   }, [punchData]);

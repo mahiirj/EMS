@@ -7,6 +7,7 @@ const Counter = require('./counter');
 const { Item, Subpart } = require('./item_details');
 const attendance_details = require('./attendance_details');
 const salary_details = require('./salary_details');
+const punchin_details = require('./punchin_details');
 
 const item_details = Item;
 
@@ -1728,6 +1729,74 @@ ipcMain.on('get_active_employee_count', async (event) => {
     }
 });
 
+
+//temporarily storing the punch in data
+
+
+ipcMain.on("punch_in:send", async (event, newPunchData) => {
+
+    try {
+
+        const currentTime = new Date();
+        const year = currentTime.getFullYear();
+        const month = currentTime.getMonth() + 1; // Months are zero-based, so add 1
+        const date = currentTime.getDate();
+
+        // Add current date and time to the newPunchData
+        newPunchData.Punch_in_time = currentTime;
+        newPunchData.Year = year;
+        newPunchData.Month = month;
+        newPunchData.Date = date;
+
+        // Create a new Punch document
+        const punch = new punchin_details(newPunchData);
+
+        // Save the document to MongoDB
+        await punch.save();
+
+        console.log('Punch-in data saved successfully.');
+
+
+    } catch (error) {
+
+        console.error(`Error saving punch-in data: ${error.message}`);
+        
+    }
+});
+
+
+// Retrieve punch-in records
+
+ipcMain.on("get:punchin_records", async (event,temp) => {
+
+    console.log(temp);
+
+    try {
+
+        const currentTime = new Date();
+        const year = currentTime.getFullYear();
+        const month = currentTime.getMonth() + 1;
+        const date = currentTime.getDate();
+
+        const records = await punchin_details.find({
+            Year: year,
+            Month: month,
+            Date: date
+        });
+
+        console.log("Records found:", records);
+
+        if (mainWindow) {
+
+            mainWindow.webContents.send('punchin_records:send', records);
+        } else {
+            console.error('mainWindow is not defined');
+        }
+    } catch (error) {
+        console.error(`Error retrieving punch-in records: ${error.message}`);
+    }
+
+});
 
 
 

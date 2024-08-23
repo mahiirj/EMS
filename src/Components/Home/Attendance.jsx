@@ -5,6 +5,7 @@ import PunchOutModal from "./PunchOutModal";
 import AttendanceInfoModal from "./AttendanceInfoModal";
 
 const Attendance = () => {
+
   const [employeeNumber, setEmployeeNumber] = useState("");
   const [actionType, setActionType] = useState("punchIn");
   const [showTable, setShowTable] = useState(true);
@@ -15,6 +16,7 @@ const Attendance = () => {
   const [recorddata, setRecorddata] = useState([]);
 
   useEffect(() => {
+
     window.electron.ipcRenderer.on("obtained_name:send", (e, employee_name) => {
       setCurrentEmployeeName(employee_name);
     });
@@ -23,8 +25,20 @@ const Attendance = () => {
       setRecorddata(records);
     });
 
+    window.electron.ipcRenderer.on("get:punchin_records",function(e,records){
+      
+      //punched in  data recieved here
+        
+    })
+
     // Request the initial records
     window.electron.ipcRenderer.send("attendance_today:send");
+
+    //request the punchin data for today
+
+    window.electron.ipcRenderer.send("get:punchin_records");
+
+    
   }, []);
 
   const handleActionClick = (type) => {
@@ -44,12 +58,15 @@ const Attendance = () => {
     const currentTime = new Date().toLocaleString();
 
     if (actionType === "punchIn") {
+
       const newPunchData = {
         employeeID: employeeNumber,
         name: currentEmployeeName,
         Punch_in_time: currentTime,
         Punch_out_time: "Active",
       };
+      
+      window.electron.ipcRenderer.send("punch_in:send",newPunchData);
 
       const updatedRecords = [...recorddata, newPunchData];
       setRecorddata(updatedRecords);
