@@ -1488,7 +1488,9 @@ ipcMain.on("attendance_today:send", async function(e) {
 
 ipcMain.on("salary_search:send", async function(e, search_object) {
 
-    const employeeIdOrName = search_object.employeeIdOrName;
+    
+
+    const employeeIdOrName = search_object.id_name;
 
     const salary_year = search_object.search_year;
 
@@ -1517,7 +1519,7 @@ ipcMain.on("salary_search:send", async function(e, search_object) {
 
         // Sort by the most recent and limit to 10 records
         try {
-            const records = await salary_details.find(query).sort({ Year: -1, Month: -1 }).limit(10).lean();
+            const records = await salary_details.find(query).sort({ Year: -1, Month: -1 }).lean();
             console.log(records);
             mainWindow.webContents.send("salary_search:result", records);
         } catch (err) {
@@ -1544,6 +1546,54 @@ ipcMain.on("salary_search:send", async function(e, search_object) {
             console.error(err);
         }
     }
+    
+
+    //if the year,month are provided, get the salary records for that monnth
+
+    if (employeeIdOrNameStr === '' && salaryYearStr !== '' && salaryMonthStr !== '' && salaryStatusStr == '') {
+
+        // Year, month, and status are provided (company-wide search for a specific period)
+        const query = {
+            Year: salaryYearStr,
+            Month: salaryMonthStr
+        };
+
+        try {
+            const records = await salary_details.find(query).lean();
+            console.log(records);
+            mainWindow.webContents.send("salary_search:result", records);
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    //if the employee id or name and the year is provided get the salaries for a certain year 
+
+    if (employeeIdOrNameStr !== '' && salaryYearStr !== '' && salaryMonthStr === '' && salaryStatusStr === '') {
+
+        // Employee ID or name, and year and month are provided (monthly salary for the employee)
+        const query = {
+            $or: [
+                { employeeID: employeeIdOrNameStr },
+                { employee_name: employeeIdOrNameStr }
+            ],
+            Year: salaryYearStr
+        
+        };
+
+        try {
+            const records = await salary_details.find(query).lean();
+
+            console.log(records);
+
+            mainWindow.webContents.send("salary_search:result", records);
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    
+    
 
     // If the employee ID or name and year and month are provided, get the monthly salary record of the employee
 
@@ -1595,9 +1645,71 @@ ipcMain.on("salary_search:send", async function(e, search_object) {
             console.error(err);
         }
     }
+
+    if(employeeIdOrNameStr === '' && salaryYearStr !== '' && salaryMonthStr === '' && salaryStatusStr === ''){
+
+        try {
+            // Aggregate salaries by month for the given year
+            const monthlySalaries = await salary_details.aggregate([
+                { $match: { Year: salaryYearStr } }, // Filter by year
+                { 
+                    $group: { 
+                        _id: "$Month", 
+                        totalSalary: { $sum: "$Salary" } 
+                    } 
+                },
+                { 
+                    $sort: { _id: 1 } // Sort by month (01, 02, etc.)
+                }
+            ]);
+    
+            // Convert the aggregation result to the desired format
+            const result = monthlySalaries.map(month => ({
+                employeeID: '', // Empty since it's a company-wide sum
+                employee_name: '', // Empty since it's a company-wide sum
+                Year: salaryYearStr,
+                Month: month._id,
+                Salary: month.totalSalary,
+                Status: '' // Empty since it's a company-wide sum
+            }));
+    
+            // Send the result array to the mainWindow
+            mainWindow.webContents.send("salary_search:result", result);
+        } catch (err) {
+            console.error(err);
+        }
+
+
+    }
 });
 
 
+
+// Handle the salary payment request
+
+ipcMain.on('salary_payment:send', async (event, paymentObject) => {
+
+    const { id, month } = paymentObject;
+  
+    try {
+
+      // Find and update the salary record
+      const result = await salary_details.findOneAndUpdate(
+        { employeeID: id, Month: month },
+        { Status: 'Paid' },
+        { new: true }
+      );
+  
+      if (result) {
+
+        console.log(result);
+
+      }
+    } catch (error) {
+      
+        console.log(error);
+    }
+});
 
 
 //counting active employees and sending it to the database

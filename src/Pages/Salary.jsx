@@ -93,6 +93,37 @@ const Salary = () => {
     );
   };
 
+  const getMonthNumber = (monthName) => {
+
+    const monthNames = [
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ];
+    const monthIndex = monthNames.indexOf(monthName);
+    return monthIndex + 1; // Months are 1-based (January = 1)
+  };
+
+
+
+  const Salary_payment = (employeeID, recordMonth) => {
+
+    // Convert the month name to a month number
+    const monthNumber = getMonthNumber(recordMonth);
+
+    const payment_object = {
+
+      id: employeeID,
+      month: monthNumber
+
+    }
+  
+    // Send the data to ipcMain
+
+    window.electron.ipcRenderer.send("salary_payment:send", payment_object);
+      
+    
+  };
+
   return (
     <div className={styles.page}>
       <div className={styles.section1}>
@@ -180,8 +211,15 @@ const Salary = () => {
                   {record.Salary}
                 </td>
                 <td>
-                  {" "}
-                  <button>Payment Due</button>
+                  {record.Status === "Due" ? (
+                    <button
+                      onClick={() => Salary_payment(record.employeeID, obtainedMonth)}
+                    >
+                      Payment Due
+                    </button>
+                  ) : (
+                    "Paid"
+                  )}
                 </td>
               </tr>
             ))}
