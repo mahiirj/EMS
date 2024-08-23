@@ -65,8 +65,7 @@ const EmployeeProfile = ({ employee, onClose, onRemove }) => {
             <span>{employeeData.registeredDate}</span>
           </div>
           <div className="detailRow">
-            <strong>Date of Birth:</strong>{" "}
-            <span>{employeeData.birthday}</span>
+            <strong>Date of Birth:</strong> <span>{employeeData.birthday}</span>
           </div>
           <div className="detailRow">
             <strong>ID Number:</strong> <span>{employeeData.idNumber}</span>
@@ -94,10 +93,6 @@ const EmployeeProfile = ({ employee, onClose, onRemove }) => {
         <div className="profileActions">
           <button onClick={handleViewPayments}>View Payment History</button>
           <button onClick={handleOpenEditModal}>Edit</button>
-
-          <button onClick={() => onRemove(employeeData.id)}>
-            Remove Employee
-          </button>
         </div>
       </div>
 

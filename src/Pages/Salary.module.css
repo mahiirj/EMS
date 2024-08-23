@@ -1,41 +1,41 @@
 * {
   margin: 0;
-  box-sizing: border-box;
 }
 
 .page {
   display: flex;
   min-height: 100vh;
-}
-
-.section1 {
-  flex: 0 0 250px; /* Adjust width as needed */
-  background-color: #f4f4f4;
+  background-color: #ffffff; /* Subtle background color for the entire page */
 }
 
 .section2 {
   flex: 1;
   padding: 20px;
-  background-color: rgba(122, 236, 156, 0.336);
-  border-radius: 30px;
+  background-color: #ffffff; /* Clean white background */
+  border-radius: 10px;
   margin: 20px;
 }
 
 .subsection {
-  background-color: rgba(255, 187, 0, 0.336);
+  background-color: rgba(122, 236, 156, 0.15);
+  box-shadow: #f8f9fa;
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 20px;
 }
 
 h2 {
   text-align: center;
   margin-bottom: 20px;
+  font-size: 26px;
+  color: #333;
 }
 
 .table {
   width: 100%;
   border-collapse: collapse;
-  margin-bottom: 20px;
   background-color: #ffffff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
 }
 
 .table th,
@@ -46,29 +46,31 @@ h2 {
 }
 
 .table th {
-  background-color: #f2f2f2;
+  background-color: #f8f9fa;
+  color: #333;
 }
 
 .searchContainer {
   margin-bottom: 20px;
-  padding: 10px;
+  padding: 15px;
   background-color: #ffffff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  gap: 15px; /* Increased gap for better spacing */
 }
 
 .searchBox {
   display: flex;
   align-items: center;
-  margin: 10px;
+  margin: 5px;
   flex: 1;
 }
 
 .searchBox label {
   margin-right: 10px;
-  font-weight: bold;
+  font-weight: 500;
+  color: #333;
 }
 
 .searchBox input {
@@ -86,33 +88,26 @@ h2 {
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s, transform 0.2s;
 }
 
 .searchButton:hover {
   background-color: #0056b3;
-}
-
-.employeeId,
-.employeeName,
-.monthlySalary,
-.advancements {
-  /* Additional styling for specific table cells */
+  transform: scale(1.05); /* Slightly enlarge button on hover */
 }
 
 /* Media Queries */
 @media (max-width: 1200px) {
   .section1 {
-    flex: 0 0 200px; /* Slightly reduce sidebar width */
+    flex: 0 0 200px;
   }
 
   .section2 {
-    margin: 20px 10px; /* Reduce margins for smaller screens */
+    margin: 20px 10px;
   }
 
   .searchContainer {
     flex-direction: column;
-    align-items: stretch;
   }
 
   .searchBox {
@@ -128,11 +123,11 @@ h2 {
 
 @media (max-width: 768px) {
   .page {
-    flex-direction: column; /* Stack sidebar and content vertically */
+    flex-direction: column;
   }
 
   .section1 {
-    flex: 0 0 100%; /* Full width sidebar */
+    flex: 0 0 100%;
     margin-bottom: 20px;
   }
 
@@ -143,12 +138,11 @@ h2 {
 
   .table th,
   .table td {
-    padding: 8px; /* Reduce padding in table cells */
+    padding: 10px;
   }
 
   .searchBox {
     flex-direction: column;
-    align-items: stretch;
   }
 
   .searchBox label {
@@ -165,9 +159,6 @@ h2 {
   }
 }
 
-.table {
-  margin: 50px 0px 100px 0px;
-}
 @media (max-width: 480px) {
   .searchBox input {
     padding: 6px;
@@ -180,7 +171,7 @@ h2 {
   }
 
   .table {
-    font-size: 14px; /* Adjust font size for small screens */
+    font-size: 14px;
   }
 
   .searchContainer {

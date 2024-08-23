@@ -128,8 +128,9 @@ const Salary = () => {
       </div>
       <div className={styles.section2}>
         <h2>Employee Attendance and Payment Records</h2>
-
         <div className={styles.subsection}>
+          <h2>{obtainedMonth} Salary List</h2>
+
           {/* First Table */}
           <table id="salary_table" className={styles.table}>
             <thead>

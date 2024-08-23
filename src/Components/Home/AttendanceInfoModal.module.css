@@ -12,56 +12,123 @@
 }
 
 .modalContent {
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
-  width: 800px; /* Increased the modal width */
-  height: 600px; /* Increased the modal height */
-  overflow-y: auto; /* Added overflow-y for scrolling if content exceeds height */
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 12px;
+  width: 800px;
+  height: 600px;
+  overflow-y: auto;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 .formGroup {
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 }
 
 .employeeInput {
   width: 100%;
-  font-size: 1.2rem; /* Increase input size */
+  padding: 12px;
+  font-size: 1.2rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: border 0.3s ease;
+}
+
+.employeeInput:focus {
+  border-color: #007bff;
+  outline: none;
 }
 
 .dateGroup {
   display: flex;
-  justify-content: center;
-  gap: 40px; /* Adjusted gap to fit side by side */
+  justify-content: space-between;
+  gap: 20px;
 }
 
 .dateInputField {
-  width: 100%; /* Adjust width to fit side by side */
+  width: 100%;
+  padding: 12px;
+  font-size: 1rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: border 0.3s ease;
+}
+
+.dateInputField:focus {
+  border-color: #007bff;
+  outline: none;
 }
 
 .formActions {
   display: flex;
   justify-content: space-between;
-  margin-top: 20px;
+  margin-top: 30px;
+}
+
+.formActions button {
+  padding: 10px 20px;
+  font-size: 1rem;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.formActions button:hover {
+  background-color: #007bff;
+  color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .tableContainer {
-  margin-top: 20px;
+  margin-top: 30px;
   overflow-x: auto;
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 th,
 td {
-  padding: 10px;
-  border: 1px solid #ddd;
+  padding: 12px;
+  border: 1px solid #e0e0e0;
   text-align: left;
 }
 
 th {
-  background-color: #f4f4f4;
+  background-color: #2edf57cb;
+
+  color: #000000;
+  font-weight: bold;
+}
+
+td {
+  background-color: #f9f9f9;
+}
+
+tr:nth-child(even) td {
+  background-color: #f2f2f2;
+}
+
+tr:hover td {
+  background-color: #e9ecef;
 }

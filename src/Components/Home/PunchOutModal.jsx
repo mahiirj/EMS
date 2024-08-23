@@ -7,18 +7,13 @@ const PunchOutModal = ({ employeeNumber, onClose, onSubmit, punchData }) => {
   const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
-
     window.electron.ipcRenderer.on("item_list:send", function (e, item_array) {
-
       setItemData(item_array);
-      
     });
 
-    window.electron.ipcRenderer.on("item_list:send",function(e,item_array){
-
+    window.electron.ipcRenderer.on("item_list:send", function (e, item_array) {
       setItemData(item_array);
-
-    })
+    });
   }, []);
 
   const handleRowClick = (item) => {
@@ -111,12 +106,15 @@ const PunchOutModal = ({ employeeNumber, onClose, onSubmit, punchData }) => {
   };
 
   const handleSearch = () => {
-
     window.electron.ipcRenderer.send("search_item:send", searchQuery);
   };
 
   const handleSearchInputChange = (e) => {
     setSearchQuery(e.target.value);
+  };
+
+  const handleRefresh = () => {
+    window.electron.ipcRenderer.send("attendance_today:send");
   };
 
   return (
@@ -134,6 +132,7 @@ const PunchOutModal = ({ employeeNumber, onClose, onSubmit, punchData }) => {
             onChange={handleSearchInputChange}
           />
           <button onClick={handleSearch}>Search</button>
+          <button onClick={handleRefresh}>Refresh</button>
         </div>
 
         <div className={styles.formGroup}>

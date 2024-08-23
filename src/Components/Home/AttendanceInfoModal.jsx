@@ -39,10 +39,6 @@ const AttendanceInfoModal = ({ onClose }) => {
     window.electron.ipcRenderer.send("attendance_search:send", search_object);
   };
 
-  const handleRefresh = () => {
-    window.electron.ipcRenderer.send("attendance_today:send");
-  };
-
   return (
     <div className={styles.modal}>
       <div className={styles.modalContent}>
@@ -97,9 +93,7 @@ const AttendanceInfoModal = ({ onClose }) => {
           <button onClick={handleSubmit} className={styles.button}>
             Search
           </button>
-          <button onClick={handleRefresh} className={styles.button}>
-            Refresh
-          </button>
+
           <button onClick={onClose} className={styles.button}>
             Close
           </button>

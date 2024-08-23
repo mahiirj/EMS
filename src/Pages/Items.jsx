@@ -79,7 +79,7 @@ const Items = () => {
         <div className={styles.search}>
           <input
             type="text"
-            placeholder="Search"
+            placeholder="  Search"
             className={styles.searchbar}
             value={searchQuery}
             onChange={handleSearchInputChange}
