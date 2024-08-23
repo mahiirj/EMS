@@ -3,22 +3,20 @@ import { useEffect, useState } from "react";
 import "./PunchDataTable.css";
 
 const PunchDataTable = ({ punchData }) => {
+  const [recorddata, setRecord] = useState([]);
 
   useEffect(() => {
-
-  
     //send IPC request to get the total employee count
     window.electron.ipcRenderer.send("attendance_today:send");
 
-    //recieving the employee count 
-    window.electron.ipcRenderer.on("attendance_today:result",function(e,records){
-
-
-    })
-
-
+    //recieving the employee count
+    window.electron.ipcRenderer.on(
+      "attendance_today:result",
+      function (e, records) {
+        setRecord(records);
+      }
+    );
   }, []);
-
 
   return (
     <div className="tableContainer">
@@ -32,12 +30,12 @@ const PunchDataTable = ({ punchData }) => {
           </tr>
         </thead>
         <tbody>
-          {punchData.map((entry, index) => (
+          {recorddata.map((entry, index) => (
             <tr key={index}>
-              <td>{entry.employeeNumber}</td>
+              <td>{entry.employeeID}</td>
               <td>{entry.name}</td>
-              <td>{entry.punchInTime}</td>
-              <td>{entry.punchOutTime}</td>
+              <td>{entry.Punch_in_time}</td>
+              <td>{entry.Punch_out_time}</td>
             </tr>
           ))}
         </tbody>

@@ -1,25 +1,23 @@
-/* AttendanceInfoModal.css */
-
 .modal {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
   z-index: 1000;
 }
 
 .modalContent {
-  background-color: white;
-  padding: 100px;
+  background: white;
+  padding: 20px;
   border-radius: 8px;
-  max-width: 900px;
-
-  overflow-y: scroll;
+  width: 800px; /* Increased the modal width */
+  height: 600px; /* Increased the modal height */
+  overflow-y: auto; /* Added overflow-y for scrolling if content exceeds height */
 }
 
 .formGroup {
@@ -34,7 +32,7 @@
 .dateGroup {
   display: flex;
   justify-content: center;
-  gap: 80px;
+  gap: 40px; /* Adjusted gap to fit side by side */
 }
 
 .dateInputField {
@@ -55,7 +53,6 @@
 table {
   width: 100%;
   border-collapse: collapse;
-  padding-bottom: 200px;
 }
 
 th,

@@ -21,6 +21,10 @@
   margin: 20px;
 }
 
+.subsection {
+  background-color: rgba(255, 187, 0, 0.336);
+}
+
 h2 {
   text-align: center;
   margin-bottom: 20px;
@@ -161,6 +165,9 @@ h2 {
   }
 }
 
+.table {
+  margin: 50px 0px 100px 0px;
+}
 @media (max-width: 480px) {
   .searchBox input {
     padding: 6px;

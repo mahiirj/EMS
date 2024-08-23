@@ -77,51 +77,48 @@ const Salary = () => {
     //making an object to hold the salary search data
 
     const search_object = {
-
       id_name: employeeIdOrName,
       search_year: salary_year,
       search_month: salary_month,
       search_status: salary_status,
-
-    }
+    };
 
     //send the data to the backend
 
-    window.electron.ipcRenderer.send(
-      "salary_search:send",
-       search_object
-    );
+    window.electron.ipcRenderer.send("salary_search:send", search_object);
   };
 
   const getMonthNumber = (monthName) => {
-
     const monthNames = [
-      "January", "February", "March", "April", "May", "June",
-      "July", "August", "September", "October", "November", "December"
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
     ];
     const monthIndex = monthNames.indexOf(monthName);
     return monthIndex + 1; // Months are 1-based (January = 1)
   };
 
-
-
   const Salary_payment = (employeeID, recordMonth) => {
-
     // Convert the month name to a month number
     const monthNumber = getMonthNumber(recordMonth);
 
     const payment_object = {
-
       id: employeeID,
-      month: monthNumber
+      month: monthNumber,
+    };
 
-    }
-  
     // Send the data to ipcMain
 
     window.electron.ipcRenderer.send("salary_payment:send", payment_object);
-      
-    
   };
 
   return (
@@ -132,99 +129,115 @@ const Salary = () => {
       <div className={styles.section2}>
         <h2>Employee Attendance and Payment Records</h2>
 
-        {/* First Table */}
-        <table id="salary_table" className={styles.table}>
-          <thead>
-            <tr>
-              <th>Employee ID</th>
-              <th>Employee Name</th>
-              <th>Month</th>
-              <th>Salary</th>
-              <th>Payment Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {salaryArray.map((record, index) => (
-              <tr key={record.employee_id}>
-                <td className={styles.employeeId}>{record.employee_id}</td>
-                <td className={styles.employeeName}>{record.employee_name}</td>
-                <td>{obtainedMonth}</td>
-                <td
-                  className={styles.monthlySalary}
-                  data-original-salary={record.monthly_salary}
-                >
-                  {record.monthly_salary}
-                </td>
-                <td>Payment Due</td>
+        <div className={styles.subsection}>
+          {/* First Table */}
+          <table id="salary_table" className={styles.table}>
+            <thead>
+              <tr>
+                <th>Employee ID</th>
+                <th>Employee Name</th>
+                <th>Month</th>
+                <th>Salary</th>
+                <th>Payment Status</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-
-        {/* Search Section */}
-        <div className={styles.searchContainer}>
-          <div className={styles.searchBox}>
-            <label htmlFor="search_id_month">Employee ID or Name</label>
-            <input
-              type="text"
-              id="search_id_month"
-              placeholder="Enter ID or Name"
-            />
-          </div>
-
-          <div className={styles.searchBox}>
-            <p>Enter Year, Month, or Date</p>
-            <input type="text" id="search_year" placeholder="Enter Year" />
-            <input type="text" id="search_month" placeholder="Enter Month" />
-            <input type="text" id="search_status" placeholder="Enter Status" />
-          </div>
-
-          <button
-            onClick={handleSearch}
-            type="button"
-            className={styles.searchButton}
-          >
-            Search...
-          </button>
+            </thead>
+            <tbody>
+              {salaryArray.map((record, index) => (
+                <tr key={record.employee_id}>
+                  <td className={styles.employeeId}>{record.employee_id}</td>
+                  <td className={styles.employeeName}>
+                    {record.employee_name}
+                  </td>
+                  <td>{obtainedMonth}</td>
+                  <td
+                    className={styles.monthlySalary}
+                    data-original-salary={record.monthly_salary}
+                  >
+                    {record.monthly_salary}
+                  </td>
+                  <td>Payment Due</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
 
-        <table id="salary_table" className={styles.table}>
-          <thead>
-            <tr>
-              <th>Employee ID</th>
-              <th>Employee Name</th>
-              <th>Month</th>
-              <th>Salary</th>
-              <th>Payment Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {salarysearch_results.map((record, index) => (
-              <tr key={record.employee}>
-                <td className={styles.employee_id}>{record.employeeID}</td>
-                <td className={styles.employeeName}>{record.employee_name}</td>
-                <td>{obtainedMonth}</td>
-                <td
-                  className={styles.monthlySalary}
-                  data-original-salary={record.Salary}
-                >
-                  {record.Salary}
-                </td>
-                <td>
-                  {record.Status === "Due" ? (
-                    <button
-                      onClick={() => Salary_payment(record.employeeID, obtainedMonth)}
-                    >
-                      Payment Due
-                    </button>
-                  ) : (
-                    "Paid"
-                  )}
-                </td>
+        <div className={styles.subsection}>
+          {/* Search Section */}
+          <div className={styles.searchContainer}>
+            <div className={styles.searchBox}>
+              <label htmlFor="search_id_month">Employee ID or Name</label>
+              <input
+                type="text"
+                id="search_id_month"
+                placeholder="Enter ID or Name"
+              />
+            </div>
+
+            <div className={styles.searchBox}>
+              <p>Enter Year, Month, or Date</p>
+              <input type="text" id="search_year" placeholder="Enter Year" />
+              <input type="text" id="search_month" placeholder="Enter Month" />
+              <input
+                type="text"
+                id="search_status"
+                placeholder="Enter Status"
+              />
+            </div>
+
+            <button
+              onClick={handleSearch}
+              type="button"
+              className={styles.searchButton}
+            >
+              Search...
+            </button>
+          </div>
+        </div>
+
+        <div className={styles.subsection}>
+          <table id="salary_table" className={styles.table}>
+            <thead>
+              <tr>
+                <th>Employee ID</th>
+                <th>Employee Name</th>
+                <th>Month</th>
+                <th>Salary</th>
+                <th>Payment Status</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {salarysearch_results.map((record, index) => (
+                <tr key={record.employee}>
+                  <td className={styles.employee_id}>{record.employeeID}</td>
+                  <td className={styles.employeeName}>
+                    {record.employee_name}
+                  </td>
+                  <td>{obtainedMonth}</td>
+                  <td
+                    className={styles.monthlySalary}
+                    data-original-salary={record.Salary}
+                  >
+                    {record.Salary}
+                  </td>
+                  <td>
+                    {record.Status === "Due" ? (
+                      <button
+                        onClick={() =>
+                          Salary_payment(record.employeeID, obtainedMonth)
+                        }
+                      >
+                        Payment Due
+                      </button>
+                    ) : (
+                      "Paid"
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );

@@ -63,3 +63,53 @@
 #submit {
   margin: 0;
 }
+
+/* For mobile phones (portrait) */
+@media screen and (max-width: 768px) {
+  .attendanceContainer {
+    max-width: 100%;
+    padding: 15px;
+    margin-bottom: 15px;
+  }
+
+  .formGroup {
+    margin-bottom: 8px;
+  }
+
+  .input {
+    padding: 5px;
+  }
+
+  .button {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+
+  .submitContainer {
+    margin-top: 10px;
+  }
+
+  .tableContainer {
+    overflow-x: auto;
+  }
+
+  .mainContainer {
+    padding: 10px;
+  }
+}
+
+/* For small mobile phones (landscape) */
+@media screen and (max-width: 980px) {
+  .button {
+    padding: 4px 10px;
+    font-size: 10px;
+  }
+
+  .input {
+    padding: 4px;
+  }
+
+  .attendanceContainer {
+    padding: 10px;
+  }
+}

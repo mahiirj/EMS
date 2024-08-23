@@ -8,7 +8,7 @@ const Attendance = () => {
   const [employeeNumber, setEmployeeNumber] = useState("");
   const [actionType, setActionType] = useState("punchIn");
   const [punchData, setPunchData] = useState([]);
-  const [showTable, setShowTable] = useState(false);
+  const [showTable, setShowTable] = useState(true);
   const [showPunchOutModal, setShowPunchOutModal] = useState(false);
   const [showAttendanceInfoModal, setShowAttendanceInfoModal] = useState(false); // State for showing the attendance info modal
   const [currentEmployeeNumber, setCurrentEmployeeNumber] = useState("");

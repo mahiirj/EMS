@@ -5,6 +5,7 @@
 .sidebar {
   background-color: rgba(68, 220, 231, 0.116);
   height: 980px;
+  height: fit-content;
   width: 400px;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
 }
